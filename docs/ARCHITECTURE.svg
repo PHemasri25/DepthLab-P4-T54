@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="640" viewBox="0 0 1160 640" role="img" aria-labelledby="title description">
+  <title id="title">DepthLab system architecture</title>
+  <desc id="description">Browser dashboard sends images to FastAPI, which validates and runs classical depth reconstruction, a checkpointed Residual U-Net, and a bicubic-guided-U-Net hybrid. A synthetic held-out benchmark returns metrics to the dashboard.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#101723"/><stop offset="1" stop-color="#172432"/></linearGradient>
+    <linearGradient id="accent" x1="0" x2="1"><stop stop-color="#54c8ae"/><stop offset="1" stop-color="#79e3c9"/></linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#69e0c3"/></marker>
+    <style>
+      .title{font:700 29px 'Segoe UI',sans-serif;fill:#edf3fa}.sub{font:12px 'Segoe UI',sans-serif;fill:#9aabba}
+      .label{font:700 13px 'Segoe UI',sans-serif;fill:#edf3fa}.body{font:11px 'Segoe UI',sans-serif;fill:#a8b7c5}
+      .tag{font:9px Consolas,monospace;fill:#87e2cc;letter-spacing:1px}.note{font:10px 'Segoe UI',sans-serif;fill:#7f91a4}
+    </style>
+  </defs>
+  <rect width="1160" height="640" rx="18" fill="url(#background)"/>
+  <text x="54" y="58" class="title">DepthLab · System architecture</text>
+  <text x="55" y="82" class="sub">Upload → classical / learned refinement → measured synthetic evaluation</text>
+
+  <rect x="48" y="138" width="245" height="326" rx="12" fill="#152130" stroke="#304050"/>
+  <rect x="48" y="138" width="245" height="5" rx="3" fill="url(#accent)"/>
+  <text x="70" y="176" class="tag">CLIENT</text>
+  <text x="70" y="205" class="label">Browser dashboard</text>
+  <text x="70" y="237" class="body">• RGB + sparse depth upload</text>
+  <text x="70" y="261" class="body">• Method, factor and radius</text>
+  <text x="70" y="285" class="body">• Before / after visualizations</text>
+  <text x="70" y="309" class="body">• Metrics, edges and scorecards</text>
+  <text x="70" y="333" class="body">• 16-bit depth PNG download</text>
+  <rect x="70" y="373" width="199" height="48" rx="7" fill="#102a2b" stroke="#31594f"/>
+  <text x="84" y="394" class="tag">HTML · CSS · JAVASCRIPT</text>
+  <text x="84" y="411" class="body">Same-origin REST requests</text>
+
+  <rect x="452" y="138" width="254" height="326" rx="12" fill="#152130" stroke="#304050"/>
+  <rect x="452" y="138" width="254" height="5" rx="3" fill="#70aafa"/>
+  <text x="474" y="176" class="tag" fill="#8bb9ff">API · APP/MAIN.PY</text>
+  <text x="474" y="205" class="label">FastAPI service</text>
+  <text x="474" y="237" class="body">• Image and parameter validation</text>
+  <text x="474" y="261" class="body">• In-memory image processing</text>
+  <text x="474" y="285" class="body">• Sample and benchmark endpoints</text>
+  <text x="474" y="309" class="body">• PNG encoding and metric response</text>
+  <rect x="474" y="359" width="208" height="60" rx="7" fill="#122033" stroke="#354d68"/>
+  <text x="490" y="383" class="tag" fill="#9dc4fb">POST /API/PROCESS</text>
+  <text x="490" y="402" class="body">Multipart input → results JSON</text>
+
+  <rect x="865" y="112" width="247" height="395" rx="12" fill="#152130" stroke="#304050"/>
+  <rect x="865" y="112" width="247" height="5" rx="3" fill="#ba9aff"/>
+  <text x="887" y="150" class="tag" fill="#c6a9ff">CORE · APP/DEPTH.PY</text>
+  <text x="887" y="179" class="label">Depth reconstruction</text>
+  <rect x="887" y="201" width="203" height="43" rx="6" fill="#1b2a39" stroke="#344556"/>
+  <text x="902" y="219" class="body">Nearest · bilinear · bicubic</text>
+  <text x="902" y="235" class="note">Interpolation baselines</text>
+  <rect x="887" y="253" width="203" height="43" rx="6" fill="#1b2a39" stroke="#344556"/>
+  <text x="902" y="271" class="body">Joint bilateral · guided filter</text>
+  <text x="902" y="287" class="note">Classical edge-aware refinement</text>
+  <rect x="887" y="305" width="203" height="43" rx="6" fill="#1b2a39" stroke="#344556"/>
+  <text x="902" y="323" class="body">Residual U-Net · hybrid pipeline</text>
+  <text x="902" y="339" class="note">Checkpointed synthetic training</text>
+  <rect x="887" y="368" width="203" height="65" rx="6" fill="#1c2a35" stroke="#344556"/>
+  <text x="902" y="388" class="body">Bicubic → guided → U-Net</text>
+  <text x="902" y="405" class="body">→ edge-aware refinement</text>
+  <text x="902" y="423" class="note">Validity mask kept; no target leakage</text>
+
+  <rect x="452" y="516" width="254" height="81" rx="10" fill="#172431" stroke="#304050"/>
+  <text x="472" y="543" class="tag">APP/BENCHMARK.PY</text>
+  <text x="472" y="565" class="label">Held-out synthetic scenes</text>
+  <text x="472" y="584" class="note">7 methods × 3 scales · robustness · ablation</text>
+
+  <path d="M303 296H438" fill="none" stroke="#69e0c3" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="319" y="282" class="tag">HTTP</text>
+  <path d="M716 296H851" fill="none" stroke="#69e0c3" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="733" y="282" class="tag">IMAGE + PARAMS</text>
+  <path d="M865 448C790 474 761 534 715 554" fill="none" stroke="#70aafa" stroke-width="1.7" marker-end="url(#arrow)"/>
+  <path d="M452 550C390 540 351 468 292 425" fill="none" stroke="#70aafa" stroke-width="1.7" marker-end="url(#arrow)"/>
+  <text x="322" y="506" class="tag" fill="#91bdf8">BENCHMARK JSON</text>
+
+  <text x="54" y="619" class="note">No database · uploads are not persisted · Docker-ready · external hosting requires team credentials</text>
+</svg>

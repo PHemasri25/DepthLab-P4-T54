@@ -1,0 +1,8 @@
+.git
+.venv
+.depthlab-venv
+.pytest_cache
+__pycache__
+*.py[cod]
+PS4.pdf
+PS4.txt

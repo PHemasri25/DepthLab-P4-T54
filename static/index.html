@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101723">
+    <title>DepthLab — Edge-aware depth reconstruction</title>
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#overview" aria-label="DepthLab home">
+          <span class="brand-mark"><span></span><span></span><span></span></span>
+          <span>depth<span class="brand-light">lab</span></span>
+        </a>
+        <div class="side-label">WORKSPACE</div>
+        <nav class="side-nav" aria-label="Main navigation">
+          <a class="nav-link active" href="#overview"><span class="nav-icon">◫</span> Overview</a>
+          <a class="nav-link" href="#workbench"><span class="nav-icon">⌗</span> Reconstruction</a>
+          <a class="nav-link" href="#evaluation"><span class="nav-icon">↗</span> Evaluation</a>
+        </nav>
+        <div class="side-bottom">
+          <div class="status-card">
+            <span class="status-dot"></span>
+            <div><strong>Processing API</strong><small id="api-status">Checking connection…</small></div>
+          </div>
+          <div class="side-note">EDGE-PRESERVING DEPTH<br>UPSAMPLING &amp; REFINEMENT</div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div class="breadcrumb">Workspace <span>/</span> Depth reconstruction</div>
+          <div class="topbar-right">
+            <span class="live-pill"><i></i> LIVE WORKSPACE</span>
+            <div class="avatar">DL</div>
+          </div>
+        </header>
+
+        <section class="page-section intro" id="overview">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-line"></span> COMPUTER VISION · PROBLEM P4</div>
+            <h1>Reconstruct depth.<br><span>Keep every edge.</span></h1>
+            <p class="intro-copy">Turn sparse measurements into dense, high-resolution depth maps — with RGB-guided boundaries, measured comparisons, and no texture-copying shortcuts.</p>
+          </div>
+          <div class="hero-meta">
+            <span class="hero-meta-label">RECONSTRUCTION PIPELINE</span>
+            <div class="pipeline">
+              <span>SPARSE<br>DEPTH</span><b>→</b><span>EDGE<br>GUIDANCE</span><b>→</b><span>DENSE<br>MAP</span>
+            </div>
+            <span class="meta-foot"><i class="status-dot"></i> Classical · CNN · Hybrid</span>
+          </div>
+        </section>
+
+        <section class="stats-grid" aria-label="Evaluation summary">
+          <article class="stat-card">
+            <div class="stat-top"><span>BEST HELD-OUT RMSE</span><span class="stat-symbol">⌁</span></div>
+            <div class="stat-value" id="stat-rmse">—</div>
+            <div class="stat-foot"><span class="tiny-dot teal"></span><span id="stat-rmse-method">Loading benchmark</span></div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>EDGE PRESERVATION</span><span class="stat-symbol">⌖</span></div>
+            <div class="stat-value" id="stat-edge">—</div>
+            <div class="stat-foot"><span class="tiny-dot blue"></span>RGB / depth boundary agreement</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>UNSEEN TEST SCENES</span><span class="stat-symbol">▧</span></div>
+            <div class="stat-value" id="stat-scenes">—</div>
+            <div class="stat-foot"><span class="tiny-dot violet"></span><span id="stat-split">Disjoint evaluation split</span></div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>MEAN PROCESSING TIME</span><span class="stat-symbol">◷</span></div>
+            <div class="stat-value" id="stat-latency">—</div>
+            <div class="stat-foot"><span class="tiny-dot amber"></span>Across evaluated methods · CPU</div>
+          </article>
+        </section>
+
+        <section class="panel workbench-panel page-section" id="workbench">
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow"><span class="eyebrow-line"></span> INTERACTIVE WORKBENCH</div>
+              <h2>Run a reconstruction</h2>
+              <p>Upload an RGB guide and a sparse or low-resolution depth map. Add ground truth to calculate accuracy metrics.</p>
+            </div>
+            <button type="button" class="button button-quiet" id="demo-button"><span class="button-icon">✳</span> Load sample scene</button>
+          </div>
+
+          <div class="upload-grid">
+            <label class="upload-card" for="rgb-input">
+              <input id="rgb-input" type="file" accept="image/*">
+              <span class="upload-icon rgb-icon">◧</span>
+              <span class="upload-title">RGB guidance</span>
+              <span class="upload-hint">Color image · PNG / JPG</span>
+              <img class="upload-preview hidden" id="rgb-preview" alt="RGB guidance preview">
+              <span class="file-name" id="rgb-name">Choose or drop an image</span>
+            </label>
+            <label class="upload-card" for="depth-input">
+              <input id="depth-input" type="file" accept="image/*">
+              <span class="upload-icon depth-icon">▦</span>
+              <span class="upload-title">Sparse depth</span>
+              <span class="upload-hint">16-bit PNG recommended · zero = missing</span>
+              <img class="upload-preview hidden" id="depth-preview" alt="Sparse depth preview">
+              <span class="file-name" id="depth-name">Choose or drop an image</span>
+            </label>
+            <label class="upload-card optional-card" for="truth-input">
+              <input id="truth-input" type="file" accept="image/*">
+              <span class="upload-icon truth-icon">◎</span>
+              <span class="upload-title">Ground truth <em>optional</em></span>
+              <span class="upload-hint">Enables RMSE, MAE, PSNR and SSIM</span>
+              <img class="upload-preview hidden" id="truth-preview" alt="Ground-truth depth preview">
+              <span class="file-name" id="truth-name">Choose a reference map</span>
+            </label>
+          </div>
+
+          <div class="controls-row">
+            <label class="control-field">
+              <span>RECONSTRUCTION METHOD</span>
+              <select id="method-select">
+                <option value="compare">Compare all 7 methods</option>
+                <option value="nearest">Nearest neighbour baseline</option>
+                <option value="bilinear">Bilinear baseline</option>
+                <option value="bicubic">Bicubic baseline</option>
+                <option value="joint_bilateral">Joint bilateral filter</option>
+                <option value="guided">Guided filter</option>
+                <option value="cnn">Residual U-Net</option>
+                <option value="hybrid">Hybrid — Bicubic + guided + U-Net</option>
+              </select>
+            </label>
+            <label class="control-field compact-field">
+              <span>UPSAMPLING</span>
+              <select id="scale-select">
+                <option value="2">2×</option>
+                <option value="4" selected>4×</option>
+                <option value="8">8×</option>
+              </select>
+            </label>
+            <label class="control-field compact-field">
+              <span>GUIDED RADIUS <b id="radius-value">5 px</b></span>
+              <input id="radius-input" type="range" min="1" max="12" value="5">
+            </label>
+            <button type="button" class="button button-primary" id="run-button"><span class="run-icon">▶</span> Reconstruct</button>
+          </div>
+          <p class="form-note">Inputs stay in your session and are processed in memory. Original measurement-validity masks are retained; depth values are preserved in the downloadable 16-bit PNG.</p>
+          <div class="alert hidden" id="workbench-alert" role="alert"></div>
+          <div class="loading-line hidden" id="workbench-loading"><span></span> Reconstructing and measuring selected methods…</div>
+
+          <div class="input-preview-grid hidden" id="input-previews">
+            <figure><figcaption>RGB GUIDE</figcaption><img id="preview-rgb" alt="RGB input"></figure>
+            <figure><figcaption>SPARSE DEPTH</figcaption><img id="preview-sparse" alt="Sparse depth input"></figure>
+            <figure><figcaption>GROUND TRUTH</figcaption><img id="preview-truth" alt="Ground truth input"><span class="no-truth hidden" id="truth-missing">Not provided</span></figure>
+          </div>
+
+          <div class="results-heading hidden" id="results-heading">
+            <div><span class="eyebrow"><span class="eyebrow-line"></span> RECONSTRUCTION OUTPUTS</span><h3 id="results-title">Method comparison</h3></div>
+            <span class="result-meta" id="result-meta"></span>
+          </div>
+          <div class="results-grid" id="results-grid"></div>
+        </section>
+
+        <section class="evaluation-layout page-section" id="evaluation">
+          <article class="panel chart-panel">
+            <div class="section-heading compact-heading">
+              <div><div class="eyebrow"><span class="eyebrow-line"></span> HELD-OUT BENCHMARK</div><h2>Accuracy by method</h2></div>
+              <span class="unit-tag">RMSE · mm ↓</span>
+            </div>
+            <p class="panel-subtitle">Mean depth error across independent generated scenes. Lower is better.</p>
+            <div class="chart-wrap"><canvas id="rmse-chart" aria-label="RMSE comparison chart"></canvas></div>
+            <div class="chart-legend"><span><i class="legend-dot"></i> Mean RMSE, 8 unseen scenes</span><span id="benchmark-scale">4× upsampling</span></div>
+          </article>
+          <article class="panel insight-panel">
+            <div class="eyebrow"><span class="eyebrow-line"></span> EVALUATION NOTES</div>
+            <h2>Built to measure, not guess.</h2>
+            <div class="insight-list">
+              <div><span class="insight-number">01</span><p><strong>Separated scene seeds</strong><br><span id="split-note">Training and test scenes are disjoint.</span></p></div>
+              <div><span class="insight-number">02</span><p><strong>Accuracy + structure</strong><br>RMSE, MAE, PSNR, SSIM, edge preservation and boundary accuracy.</p></div>
+              <div><span class="insight-number">03</span><p><strong>Performance budget</strong><br>Per-method CPU latency and actual process RSS are reported.</p></div>
+            </div>
+            <p class="limitation-note" id="benchmark-limitations">Loading benchmark limitations…</p>
+          </article>
+        </section>
+
+        <section class="panel table-panel page-section">
+          <div class="section-heading compact-heading">
+            <div><div class="eyebrow"><span class="eyebrow-line"></span> COMPARATIVE RESULTS</div><h2>Method scorecard</h2></div>
+            <span class="unit-tag">Average over held-out scenes</span>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>METHOD</th><th>RMSE ↓</th><th>MAE ↓</th><th>PSNR ↑</th><th>SSIM ↑</th><th>EDGE SCORE ↑</th><th>BOUNDARY ↑</th><th>EDGE F1 ↑</th><th>LATENCY</th><th>PROCESS RSS</th></tr></thead>
+              <tbody id="benchmark-table"><tr><td colspan="10" class="empty-row">Running the held-out benchmark…</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel table-panel page-section">
+          <div class="section-heading compact-heading">
+            <div><div class="eyebrow"><span class="eyebrow-line"></span> ROBUSTNESS CHECKS</div><h2>Noisy and missing-depth experiments</h2></div>
+            <span class="unit-tag">4× held-out synthetic scenes</span>
+          </div>
+          <div class="table-scroll">
+            <table><thead><tr><th>CONDITION</th><th>METHOD</th><th>RMSE ↓</th><th>MAE ↓</th><th>SSIM ↑</th><th>EDGE F1 ↑</th></tr></thead>
+              <tbody id="experiment-table"><tr><td colspan="6" class="empty-row">Running noise and missing-depth experiments…</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel table-panel page-section">
+          <div class="section-heading compact-heading">
+            <div><div class="eyebrow"><span class="eyebrow-line"></span> COMPONENT ABLATION</div><h2>Contribution and failure analysis</h2></div>
+            <span class="unit-tag">4× held-out synthetic scenes</span>
+          </div>
+          <div class="table-scroll">
+            <table><thead><tr><th>VARIANT</th><th>RMSE ↓</th><th>MAE ↓</th><th>SSIM ↑</th><th>EDGE F1 ↑</th></tr></thead>
+              <tbody id="ablation-table"><tr><td colspan="5" class="empty-row">Computing component ablations…</td></tr></tbody>
+            </table>
+          </div>
+          <ul class="failure-list" id="failure-analysis"><li>Loading measured failure cases…</li></ul>
+        </section>
+
+        <section class="panel table-panel page-section">
+          <div class="section-heading compact-heading">
+            <div><div class="eyebrow"><span class="eyebrow-line"></span> SCALE SENSITIVITY</div><h2>Performance across upsampling factors</h2></div>
+            <span class="unit-tag">RMSE · mm ↓ &nbsp; / &nbsp; SSIM ↑</span>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>METHOD</th><th>2× RMSE</th><th>2× SSIM</th><th>4× RMSE</th><th>4× SSIM</th><th>8× RMSE</th><th>8× SSIM</th></tr></thead>
+              <tbody id="scale-benchmark-table"><tr><td colspan="7" class="empty-row">Computing 2×, 4× and 8× held-out results…</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel recent-panel page-section">
+          <div class="section-heading compact-heading">
+            <div><div class="eyebrow"><span class="eyebrow-line"></span> SESSION HISTORY</div><h2>Recent runs</h2></div>
+            <span class="unit-tag">Saved in this browser</span>
+          </div>
+          <div class="table-scroll">
+            <table><thead><tr><th>TIME</th><th>METHOD</th><th>OUTPUT SIZE</th><th>RMSE</th><th>STATUS</th></tr></thead>
+              <tbody id="history-table"><tr><td colspan="5" class="empty-row">Runs you complete will appear here.</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+
+        <footer class="footer"><span><b>DEPTHLAB</b> · EDGE-PRESERVING DEPTH RECONSTRUCTION</span><span>Generated benchmark · See README for scope and limitations</span></footer>
+      </main>
+    </div>
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>

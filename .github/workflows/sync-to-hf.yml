@@ -13,4 +13,9 @@ jobs:
       - name: Push to Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --force https://t54-depthlab:$HF_TOKEN@huggingface.co/spaces/t54-depthlab/depthlab-p4-t54 main
+        run: |
+          git config user.name "ci"
+          git config user.email "ci@users.noreply.github.com"
+          git lfs install
+          git lfs migrate import --include="*.pt" --everything
+          git push --force https://t54-depthlab:$HF_TOKEN@huggingface.co/spaces/t54-depthlab/depthlab-p4-t54 HEAD:main

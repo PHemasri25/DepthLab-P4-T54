@@ -13,7 +13,7 @@ from starlette.concurrency import run_in_threadpool
 
 from .benchmark import run_benchmark
 from .data import demo_scene
-from .depth import DEFAULT_CHECKPOINT, METHODS, METHOD_LABELS, process_comparison
+from .depth import DEFAULT_CHECKPOINT, METHODS, METHOD_LABELS, _filled_depth, process_comparison
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -67,6 +67,43 @@ def _decode_depth(payload: bytes) -> np.ndarray:
     return depth
 
 
+def _depth_guide(depth: np.ndarray, size: tuple[int, int]) -> np.ndarray:
+    valid = np.isfinite(depth) & (depth > 0)
+    if not valid.any():
+        raise HTTPException(status_code=400, detail="Depth input contains no valid measurements for guidance.")
+    filled, _ = _filled_depth(depth)
+    low, high = float(np.min(depth[valid])), float(np.max(depth[valid]))
+    if high - low <= 1e-6:
+        normalized = np.zeros_like(filled, dtype=np.float32)
+    else:
+        normalized = np.clip((filled - low) / (high - low), 0, 1)
+    gray = cv2.resize(
+        (normalized * 255).astype(np.uint8),
+        size,
+        interpolation=cv2.INTER_CUBIC,
+    )
+    return np.repeat(gray[:, :, None], 3, axis=2)
+
+
+def _simulated_sparse_depth(ground_truth: np.ndarray, scale: int) -> np.ndarray:
+    height, width = ground_truth.shape
+    sparse_height, sparse_width = height // scale, width // scale
+    sparse = cv2.resize(
+        ground_truth,
+        (sparse_width, sparse_height),
+        interpolation=cv2.INTER_AREA,
+    )
+    rng = np.random.default_rng(2026)
+    depth_range = float(np.max(ground_truth) - np.min(ground_truth))
+    noise_sigma = max(depth_range * 0.01, np.finfo(np.float32).eps)
+    sparse = np.maximum(
+        sparse + rng.normal(0, noise_sigma, sparse.shape).astype(np.float32),
+        np.finfo(np.float32).eps,
+    )
+    sparse[rng.random(sparse.shape) < 0.05] = 0
+    return sparse.astype(np.float32)
+
+
 async def _read_image(file: UploadFile, field: str) -> bytes:
     payload = await file.read(MAX_UPLOAD_BYTES + 1)
     if not payload:
@@ -115,37 +152,80 @@ async def benchmark() -> dict:
 
 @app.post("/api/process")
 async def process(
-    rgb_file: Annotated[UploadFile, File()],
     depth_file: Annotated[UploadFile, File()],
+    rgb_file: Annotated[UploadFile | None, File()] = None,
     ground_truth_file: Annotated[UploadFile | None, File()] = None,
     method: Annotated[str, Form()] = "hybrid",
     scale: Annotated[int, Form()] = 4,
     radius: Annotated[int, Form()] = 5,
-    epsilon: Annotated[float, Form()] = 0.01,
+    epsilon: Annotated[float, Form()] = 0.0001,
+    simulate: Annotated[bool, Form()] = False,
 ) -> dict:
     if method != "compare" and method not in METHODS:
         raise HTTPException(status_code=400, detail="Choose a supported method or compare all methods.")
     if scale not in (2, 4, 8):
         raise HTTPException(status_code=400, detail="Upsampling scale must be 2, 4, or 8.")
-    if not 1 <= radius <= 12 or not 0.001 <= epsilon <= 0.1:
+    if not 1 <= radius <= 12 or not 0.00001 <= epsilon <= 0.1:
         raise HTTPException(status_code=400, detail="Filter radius or epsilon is outside the supported range.")
 
-    rgb = _decode_rgb(await _read_image(rgb_file, "RGB image"), "RGB image")
-    sparse_depth = _decode_depth(await _read_image(depth_file, "Depth image"))
-    truth = None
-    if ground_truth_file is not None and ground_truth_file.filename:
-        truth = _decode_depth(await _read_image(ground_truth_file, "Ground-truth image"))
-
-    if sparse_depth.shape[0] < 2 or sparse_depth.shape[1] < 2:
+    uploaded_depth = _decode_depth(await _read_image(depth_file, "Depth image"))
+    if uploaded_depth.shape[0] < 2 or uploaded_depth.shape[1] < 2:
         raise HTTPException(status_code=400, detail="Depth input must be at least 2 × 2 pixels.")
-    rgb_ratio = rgb.shape[1] / rgb.shape[0]
-    depth_ratio = sparse_depth.shape[1] / sparse_depth.shape[0]
-    if abs(rgb_ratio - depth_ratio) / max(rgb_ratio, depth_ratio) > 0.05:
-        raise HTTPException(status_code=400, detail="RGB and depth images must have matching aspect ratios.")
-    if truth is not None:
-        truth_ratio = truth.shape[1] / truth.shape[0]
-        if abs(rgb_ratio - truth_ratio) / max(rgb_ratio, truth_ratio) > 0.05:
-            raise HTTPException(status_code=400, detail="Ground-truth and RGB images must have matching aspect ratios.")
+    uploaded_rgb = (
+        _decode_rgb(await _read_image(rgb_file, "RGB image"), "RGB image")
+        if rgb_file is not None and rgb_file.filename
+        else None
+    )
+
+    if simulate:
+        if not np.isfinite(uploaded_depth).all() or np.any(uploaded_depth <= 0):
+            raise HTTPException(
+                status_code=400,
+                detail="Simulation requires a dense depth image with finite, positive ground-truth values.",
+            )
+        crop_height = uploaded_depth.shape[0] // scale * scale
+        crop_width = uploaded_depth.shape[1] // scale * scale
+        if crop_height < 2 * scale or crop_width < 2 * scale:
+            raise HTTPException(
+                status_code=400,
+                detail="Depth image must be at least twice the selected scale in both dimensions for simulation.",
+            )
+        truth = uploaded_depth[:crop_height, :crop_width].copy()
+        if uploaded_rgb is not None:
+            rgb_ratio = uploaded_rgb.shape[1] / uploaded_rgb.shape[0]
+            depth_ratio = truth.shape[1] / truth.shape[0]
+            if abs(rgb_ratio - depth_ratio) / max(rgb_ratio, depth_ratio) > 0.05:
+                raise HTTPException(status_code=400, detail="RGB and depth images must have matching aspect ratios.")
+            rgb = cv2.resize(uploaded_rgb, (crop_width, crop_height), interpolation=cv2.INTER_AREA)
+        else:
+            rgb = None
+        sparse_depth = _simulated_sparse_depth(truth, scale)
+        if rgb is None:
+            rgb = _depth_guide(sparse_depth, (crop_width, crop_height))
+    else:
+        sparse_depth = uploaded_depth
+        truth = None
+        if ground_truth_file is not None and ground_truth_file.filename:
+            truth = _decode_depth(await _read_image(ground_truth_file, "Ground-truth image"))
+        if uploaded_rgb is not None:
+            rgb_ratio = uploaded_rgb.shape[1] / uploaded_rgb.shape[0]
+            depth_ratio = sparse_depth.shape[1] / sparse_depth.shape[0]
+            if abs(rgb_ratio - depth_ratio) / max(rgb_ratio, depth_ratio) > 0.05:
+                raise HTTPException(status_code=400, detail="RGB and depth images must have matching aspect ratios.")
+            rgb = uploaded_rgb
+        else:
+            output_width = min(sparse_depth.shape[1] * scale, MAX_PIXELS)
+            output_height = min(sparse_depth.shape[0] * scale, MAX_PIXELS)
+            if output_width * output_height > MAX_PIXELS:
+                ratio = (MAX_PIXELS / (output_width * output_height)) ** 0.5
+                output_width = max(2, int(output_width * ratio))
+                output_height = max(2, int(output_height * ratio))
+            rgb = _depth_guide(sparse_depth, (output_width, output_height))
+        if truth is not None:
+            rgb_ratio = rgb.shape[1] / rgb.shape[0]
+            truth_ratio = truth.shape[1] / truth.shape[0]
+            if abs(rgb_ratio - truth_ratio) / max(rgb_ratio, truth_ratio) > 0.05:
+                raise HTTPException(status_code=400, detail="Ground-truth and RGB images must have matching aspect ratios.")
     selected_methods = METHODS if method == "compare" else (method,)
 
     try:
@@ -171,7 +251,17 @@ async def process(
         depth = row["prediction"]
         metrics = {
             key: row[key]
-            for key in ("rmse", "mae", "psnr", "ssim", "edge_preservation", "boundary_accuracy", "edge_f1")
+            for key in (
+                "rmse",
+                "mae",
+                "psnr",
+                "ssim",
+                "edge_preservation",
+                "boundary_accuracy",
+                "boundary_rmse",
+                "boundary_mae",
+                "edge_f1",
+            )
             if key in row
         }
         results.append(
@@ -198,6 +288,7 @@ async def process(
             "depth_height": int(sparse_depth.shape[0]),
             "scale": scale,
             "has_ground_truth": truth is not None,
+            "simulated": simulate,
         },
         "unit": "input units",
         "methods": [METHOD_LABELS[key] for key in selected_methods],

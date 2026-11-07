@@ -48,18 +48,37 @@ def run_benchmark() -> dict:
             if scale == 4:
                 if not ablation_rows:
                     ablation_rows = {
-                        "Full hybrid (bicubic + guided + U-Net)": [],
-                        "Without U-Net (joint bilateral only)": [],
-                        "Without RGB guidance": [],
+                        "Full hybrid": [],
+                        "Without guided filter": [],
+                        "Without U-Net": [],
+                        "Without edge refinement": [],
+                        "Without RGB (constant gray guide)": [],
+                        "Bicubic reference": [],
+                        "Joint bilateral reference": [],
                     }
-                for label, guide in (
-                    ("Full hybrid (bicubic + guided + U-Net)", rgb),
-                    ("Without U-Net (joint bilateral only)", rgb),
-                    ("Without RGB guidance", np.full_like(rgb, 128)),
-                ):
-                    method = "hybrid" if label != "Without U-Net (joint bilateral only)" else "joint_bilateral"
+                ablation_specs = (
+                    ("Full hybrid", "hybrid", rgb, {}),
+                    ("Without guided filter", "hybrid", rgb, {"use_guided": False}),
+                    ("Without U-Net", "hybrid", rgb, {"use_unet": False}),
+                    ("Without edge refinement", "hybrid", rgb, {"use_refine": False}),
+                    (
+                        "Without RGB (constant gray guide)",
+                        "hybrid",
+                        np.full_like(rgb, 128),
+                        {},
+                    ),
+                    ("Bicubic reference", "bicubic", rgb, {}),
+                    ("Joint bilateral reference", "joint_bilateral", rgb, {}),
+                )
+                for label, method, guide, variant in ablation_specs:
                     started = time.perf_counter()
-                    prediction, _ = reconstruct(guide, sparse, method, scale)
+                    prediction, _ = reconstruct(
+                        guide,
+                        sparse,
+                        method,
+                        scale,
+                        variant=variant,
+                    )
                     metrics = calculate_metrics(prediction, truth, rgb)
                     metrics["latency_ms"] = (time.perf_counter() - started) * 1000
                     metrics["process_rss_mb"] = psutil.Process().memory_info().rss / (1024 * 1024)
@@ -131,6 +150,8 @@ def _aggregate(
         "ssim",
         "edge_preservation",
         "boundary_accuracy",
+        "boundary_rmse",
+        "boundary_mae",
         "edge_f1",
         "latency_ms",
         "process_rss_mb",

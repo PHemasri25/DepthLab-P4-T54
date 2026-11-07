@@ -102,6 +102,8 @@ h2 { margin: 7px 0 5px; font: 700 18px Manrope, sans-serif; letter-spacing: -.45
 select { height: 36px; width: 100%; padding: 0 28px 0 10px; border: 1px solid #344253; border-radius: 6px; background: #101924; color: #dce5ed; font-size: 10px; }
 .compact-field { min-width: 83px; max-width: 105px; }.compact-field input[type="range"] { width: 100%; height: 36px; accent-color: var(--teal); }
 .form-note { margin: 11px 0 0; color: #718296; font-size: 9px; }
+.simulation-control { display: flex; align-items: center; gap: 8px; margin-top: 13px; color: #a9bac9; font-size: 10px; }
+.simulation-control input { accent-color: var(--teal); }
 .alert { margin-top: 13px; padding: 10px 12px; border: 1px solid rgba(255,141,141,.36); border-radius: 6px; background: rgba(255,141,141,.08); color: #ffb1b1; font-size: 11px; }
 .loading-line { display: flex; align-items: center; gap: 9px; margin-top: 14px; color: #a4b5c6; font-size: 11px; }
 .loading-line span { width: 12px; height: 12px; border: 2px solid #3d5b5c; border-top-color: var(--teal); border-radius: 50%; animation: spin .75s linear infinite; }

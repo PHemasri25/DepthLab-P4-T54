@@ -77,7 +77,7 @@ def _gray(rgb: np.ndarray) -> np.ndarray:
     return cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY).astype(np.float32) / 255.0
 
 
-def _guided_filter(guide: np.ndarray, source: np.ndarray, radius: int = 5, epsilon: float = 0.01) -> np.ndarray:
+def _guided_filter(guide: np.ndarray, source: np.ndarray, radius: int = 5, epsilon: float = 0.0001) -> np.ndarray:
     guide = guide.astype(np.float32)
     source = source.astype(np.float32)
     size = (radius * 2 + 1, radius * 2 + 1)
@@ -297,6 +297,18 @@ def calculate_metrics(prediction: np.ndarray, ground_truth: np.ndarray, guide: n
     truth_x = cv2.Sobel(ground_truth, cv2.CV_32F, 1, 0, ksize=3)
     truth_y = cv2.Sobel(ground_truth, cv2.CV_32F, 0, 1, ksize=3)
     boundary = np.hypot(truth_x, truth_y) > dynamic_range * 0.08
+    boundary_band = cv2.dilate(
+        boundary.astype(np.uint8),
+        np.ones((3, 3), dtype=np.uint8),
+        iterations=2,
+    ).astype(bool)
+    if boundary_band.any():
+        boundary_residual = residual[boundary_band]
+        boundary_rmse = float(np.sqrt(np.mean(boundary_residual * boundary_residual)))
+        boundary_mae = float(np.mean(np.abs(boundary_residual)))
+    else:
+        boundary_rmse = 0.0
+        boundary_mae = 0.0
     if boundary.any():
         pred_x = cv2.Sobel(prediction, cv2.CV_32F, 1, 0, ksize=3)
         pred_y = cv2.Sobel(prediction, cv2.CV_32F, 0, 1, ksize=3)
@@ -310,6 +322,8 @@ def calculate_metrics(prediction: np.ndarray, ground_truth: np.ndarray, guide: n
         "ssim": float(np.clip(np.mean(ssim_map), -1, 1)),
         "edge_preservation": _edge_score(prediction, guide),
         "boundary_accuracy": boundary_accuracy,
+        "boundary_rmse": boundary_rmse,
+        "boundary_mae": boundary_mae,
         "edge_f1": _edge_f1(prediction, ground_truth),
     }
 
@@ -320,7 +334,8 @@ def reconstruct(
     method: str,
     scale: int = 4,
     radius: int = 5,
-    epsilon: float = 0.01,
+    epsilon: float = 0.0001,
+    variant: dict[str, bool] | None = None,
 ) -> tuple[np.ndarray, float]:
     if method not in METHODS:
         raise ValueError(f"Unknown method '{method}'.")
@@ -365,11 +380,18 @@ def reconstruct(
         else:
             base = initial_depth
             if method == "hybrid":
-                base = _guided_filter(_gray(rgb), initial_depth, radius, epsilon)
-            residual = _model().predict(rgb, base, valid_mask)
-            prediction = np.clip(base + residual, 0, 1)
-            if method == "hybrid":
-                prediction, _ = _edge_aware_refine(rgb, prediction, base)
+                options = variant or {}
+                if options.get("use_guided", True):
+                    base = _guided_filter(_gray(rgb), initial_depth, radius, epsilon)
+                prediction = base
+                if options.get("use_unet", True):
+                    residual = _model().predict(rgb, base, valid_mask)
+                    prediction = np.clip(base + residual, 0, 1)
+                if options.get("use_refine", True):
+                    prediction, _ = _edge_aware_refine(rgb, prediction, base)
+            else:
+                residual = _model().predict(rgb, base, valid_mask)
+                prediction = np.clip(base + residual, 0, 1)
 
     prediction = np.clip(prediction, 0, 1) * (high - low) + low
     elapsed_ms = (time.perf_counter() - start) * 1000
@@ -382,7 +404,7 @@ def process_comparison(
     ground_truth: np.ndarray | None = None,
     scale: int = 4,
     radius: int = 5,
-    epsilon: float = 0.01,
+    epsilon: float = 0.0001,
     methods: tuple[str, ...] | None = None,
 ) -> list[dict]:
     outputs = []

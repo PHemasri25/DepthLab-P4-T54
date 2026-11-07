@@ -12,12 +12,14 @@ DepthLab is a local-first computer-vision workbench for refining sparse or low-r
 
 ## Features
 
-- Upload RGB guidance, sparse depth, and optional dense ground truth, or load a generated sample.
+- Upload optional RGB guidance and a depth map, or load a generated sample. RGB-free grayscale guidance is derived from the measurements.
+- Optionally simulate sparse, noisy measurements by marking an uploaded full-resolution depth map as the simulation source.
 - Select nearest, bilinear, bicubic, joint bilateral, guided filter, Residual U-Net, or hybrid; run a side-by-side comparison.
 - Select 2×, 4×, or 8× output scale and adjust guided-filter radius.
+- The guided-filter regularisation epsilon defaults to 0.0001.
 - Preserve the original validity mask, reject invalid inputs, fill holes, and remove isolated depth spikes.
 - Inspect colorized depth, RGB/depth edge overlays, optional error maps, and downloadable 16-bit depth PNGs.
-- View measured RMSE, MAE, PSNR, SSIM, edge preservation, boundary accuracy, edge F-score, processing latency, and process RSS when ground truth is available.
+- View measured RMSE, MAE, boundary RMSE/MAE, PSNR, SSIM, RGB-edge agreement (proxy), boundary accuracy, edge F-score, processing latency, and process RSS when ground truth is available.
 - Review held-out results at each scale, mean ± standard deviation, noisy/missing-depth experiments, an ablation, and failure analysis.
 - Uploads are processed in memory and are not persisted by the API.
 
@@ -63,7 +65,7 @@ The image includes CPU PyTorch and the trained checkpoint. The container listens
 | Hybrid reconstruction | Bicubic initialization → guided filtering → U-Net residual → edge-aware refinement |
 | Sparse/noisy/missing depth | Controlled synthetic sampling, invalid-value handling, preserved validity mask, hole filling and isolated-spike removal |
 | Multi-scale evaluation | All seven methods at 2×, 4×, and 8× |
-| Quantitative evaluation | RMSE, MAE, PSNR, SSIM, edge preservation, boundary accuracy, edge F1, latency, process RSS, and Python allocation |
+| Quantitative evaluation | RMSE, MAE, boundary RMSE/MAE, PSNR, SSIM, RGB-edge agreement proxy, boundary accuracy, edge F1, latency, process RSS, and Python allocation |
 | Robustness and analysis | High-noise and high-missing experiments, mean/std aggregation, component ablation, generated failure analysis |
 | Functional demo | FastAPI upload API and HTML/CSS/JavaScript dashboard with visualizations, loading/error states, comparison, and downloadable outputs |
 | Reproducibility | Checkpointed model, tests, Dockerfile, design/architecture docs, and generated JSON report |
@@ -75,7 +77,7 @@ No ground-truth accuracy metrics are fabricated for uploads without a reference 
 - `GET /api/health` — service status, supported methods, and checkpoint availability.
 - `GET /api/demo` — generated RGB, sparse depth, and reference PNGs.
 - `GET /api/benchmark` — cached benchmark measurements for the current process.
-- `POST /api/process` — multipart `rgb_file`, `depth_file`, optional `ground_truth_file`, plus `method`, `scale`, `radius`, and `epsilon`. Use `method=compare` for all methods.
+- `POST /api/process` — multipart optional `rgb_file`, required `depth_file`, optional `ground_truth_file`, `simulate` (default false), plus `method`, `scale`, `radius`, and `epsilon`. Use `method=compare` for all methods. With simulation enabled, the depth upload is treated as dense ground truth, cropped to a multiple of the scale, then downsampled with 1% Gaussian noise and 5% missing samples.
 
 Images are capped at 8 MB and one megapixel each. Zero and non-finite depth samples are invalid; at least one positive measurement is required. Input units are preserved in output; the generated scene uses millimetres. Downloads use unsigned 16-bit PNG.
 
@@ -95,7 +97,7 @@ The actual generated measurements are in [evaluation/results.json](evaluation/re
 - The learned model is trained only on simple generated scenes, not NYU Depth, KITTI, or another real sensor dataset.
 - Generated geometry does not capture realistic sensor noise, calibration, reflective/transparent surfaces, or RGB/depth misregistration.
 - RGB texture and shadows can be mistaken for depth boundaries; edge agreement is not a substitute for ground-truth accuracy.
-- The current synthetic evaluation shows the classical joint bilateral method outperforms the hybrid on RMSE. The hybrid is retained for comparison, not presented as the best method.
+- On the current synthetic split, guided filtering has the lowest 4× and 8× RMSE by a small margin over the hybrid; the hybrid has the highest SSIM at those scales. Joint bilateral has the lowest 4× MAE and highest 4× edge F1. The Residual U-Net is close to bicubic, and removing it from the hybrid changes 4× RMSE by less than 0.3 mm.
 - Validate on authorized, scene-disjoint real data before using results in consequential applications. Depth maps can expose sensitive spatial information.
 
 ## Submission and deployment

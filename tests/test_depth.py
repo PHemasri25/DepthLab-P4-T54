@@ -152,6 +152,26 @@ def test_metrics_are_finite_for_exact_prediction():
     assert metrics["mae"] == 0
     assert metrics["ssim"] == pytest.approx(1.0, abs=1e-5)
     assert 0 <= metrics["edge_preservation"] <= 1
+    assert metrics["boundary_rmse"] == 0
+    assert metrics["boundary_mae"] == 0
+
+
+def test_boundary_errors_use_twice_dilated_ground_truth_edge_band():
+    rgb = np.zeros((24, 24, 3), dtype=np.uint8)
+    truth = np.zeros((24, 24), dtype=np.float32)
+    truth[:, 12:] = 10
+    prediction = truth.copy()
+    prediction[9:15, 9:15] += 2
+    metrics = calculate_metrics(prediction, truth, rgb)
+
+    sobel_x = cv2.Sobel(truth, cv2.CV_32F, 1, 0, ksize=3)
+    sobel_y = cv2.Sobel(truth, cv2.CV_32F, 0, 1, ksize=3)
+    boundary = (np.hypot(sobel_x, sobel_y) > 0.8).astype(np.uint8)
+    band = cv2.dilate(boundary, np.ones((3, 3), dtype=np.uint8), iterations=2).astype(bool)
+    residual = (prediction - truth)[band]
+
+    assert metrics["boundary_rmse"] == pytest.approx(np.sqrt(np.mean(residual**2)))
+    assert metrics["boundary_mae"] == pytest.approx(np.mean(np.abs(residual)))
 
 
 def test_process_api_returns_downloadable_outputs_and_metrics():
@@ -170,7 +190,7 @@ def test_process_api_returns_downloadable_outputs_and_metrics():
                 "depth_file": ("depth.png", images[1], "image/png"),
                 "ground_truth_file": ("truth.png", images[2], "image/png"),
             },
-            data={"method": "hybrid", "scale": "4", "radius": "5", "epsilon": "0.01"},
+            data={"method": "hybrid", "scale": "4", "radius": "5", "epsilon": "0.0001"},
         )
 
     assert response.status_code == 200
@@ -178,11 +198,41 @@ def test_process_api_returns_downloadable_outputs_and_metrics():
     assert result["method"] == "hybrid"
     assert result["metrics_available"] is True
     assert result["metrics"]["rmse"] >= 0
+    assert result["metrics"]["boundary_rmse"] >= 0
+    assert result["metrics"]["boundary_mae"] >= 0
     assert 0 <= result["metrics"]["edge_f1"] <= 1
     assert result["depth_png"]
     assert result["edge_png"]
     assert result["process_rss_mb"] > 0
     assert result["error_png"]
+
+
+@pytest.mark.parametrize(
+    ("epsilon", "expected_status"),
+    (("0.0001", 200), ("0.000001", 400)),
+)
+def test_process_api_validates_epsilon_range(epsilon, expected_status):
+    rgb, sparse, _ = demo_scene()
+    rgb_ok, rgb_bytes = cv2.imencode(".png", cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR))
+    depth_ok, depth_bytes = cv2.imencode(".png", sparse.astype(np.uint16))
+    assert rgb_ok and depth_ok
+
+    with TestClient(app) as client:
+        response = client.post(
+            "/api/process",
+            files={
+                "rgb_file": ("rgb.png", rgb_bytes.tobytes(), "image/png"),
+                "depth_file": ("depth.png", depth_bytes.tobytes(), "image/png"),
+            },
+            data={
+                "method": "hybrid",
+                "scale": "4",
+                "radius": "5",
+                "epsilon": epsilon,
+            },
+        )
+
+    assert response.status_code == expected_status
 
 
 def test_process_api_reports_invalid_methods():
@@ -198,7 +248,7 @@ def test_process_api_reports_invalid_methods():
                 "rgb_file": ("rgb.png", rgb_bytes.tobytes(), "image/png"),
                 "depth_file": ("depth.png", depth_bytes.tobytes(), "image/png"),
             },
-            data={"method": "unknown", "scale": "4", "radius": "5", "epsilon": "0.01"},
+            data={"method": "unknown", "scale": "4", "radius": "5", "epsilon": "0.0001"},
         )
 
     assert response.status_code == 400
@@ -218,7 +268,7 @@ def test_process_api_marks_supervised_metrics_unavailable_without_ground_truth()
                 "rgb_file": ("rgb.png", rgb_bytes.tobytes(), "image/png"),
                 "depth_file": ("depth.png", depth_bytes.tobytes(), "image/png"),
             },
-            data={"method": "nearest", "scale": "4", "radius": "5", "epsilon": "0.01"},
+            data={"method": "nearest", "scale": "4", "radius": "5", "epsilon": "0.0001"},
         )
 
     assert response.status_code == 200
@@ -227,3 +277,76 @@ def test_process_api_marks_supervised_metrics_unavailable_without_ground_truth()
     assert "rmse" not in result["metrics"]
     assert result["metrics"]["edge_preservation"] >= 0
     assert result["error_png"] is None
+
+
+def test_process_api_can_simulate_sparse_depth_without_rgb_or_reference_upload():
+    _, _, truth = demo_scene()
+    ok, depth_bytes = cv2.imencode(".png", truth.astype(np.uint16))
+    assert ok
+
+    with TestClient(app) as client:
+        response = client.post(
+            "/api/process",
+            files={"depth_file": ("dense-depth.png", depth_bytes.tobytes(), "image/png")},
+            data={"method": "nearest", "scale": "4", "simulate": "true"},
+        )
+
+    assert response.status_code == 200
+    payload = response.json()
+    result = payload["results"][0]
+    assert payload["input"]["simulated"] is True
+    assert payload["input"]["has_ground_truth"] is True
+    assert payload["input"]["width"] == truth.shape[1]
+    assert payload["input"]["height"] == truth.shape[0]
+    assert result["metrics_available"] is True
+    assert np.isfinite(result["metrics"]["boundary_rmse"])
+    assert np.isfinite(result["metrics"]["boundary_mae"])
+    assert result["depth_png"]
+
+
+def test_process_api_generates_rgb_guide_when_rgb_is_omitted():
+    _, sparse, _ = demo_scene()
+    ok, depth_bytes = cv2.imencode(".png", sparse.astype(np.uint16))
+    assert ok
+
+    with TestClient(app) as client:
+        response = client.post(
+            "/api/process",
+            files={"depth_file": ("sparse-depth.png", depth_bytes.tobytes(), "image/png")},
+            data={"method": "nearest", "scale": "4"},
+        )
+
+    assert response.status_code == 200
+    assert response.json()["results"][0]["metrics_available"] is False
+
+
+def test_hybrid_variant_flags_skip_disabled_components(monkeypatch):
+    rgb, sparse, _ = demo_scene()
+    calls = {"guided": 0, "unet": 0, "refine": 0}
+
+    def guided(guide, source, radius, epsilon):
+        calls["guided"] += 1
+        return source
+
+    def predict(guide, source, mask):
+        calls["unet"] += 1
+        return np.zeros_like(source)
+
+    def refine(guide, prediction, base):
+        calls["refine"] += 1
+        return prediction, np.zeros_like(prediction, dtype=np.uint8)
+
+    monkeypatch.setattr(depth_module, "_guided_filter", guided)
+    monkeypatch.setattr(depth_module, "_model", lambda: type("Model", (), {"predict": staticmethod(predict)})())
+    monkeypatch.setattr(depth_module, "_edge_aware_refine", refine)
+
+    reconstruct(rgb, sparse, "hybrid", variant={})
+    assert calls == {"guided": 1, "unet": 1, "refine": 1}
+
+    reconstruct(
+        rgb,
+        sparse,
+        "hybrid",
+        variant={"use_guided": False, "use_unet": False, "use_refine": False},
+    )
+    assert calls == {"guided": 1, "unet": 1, "refine": 1}

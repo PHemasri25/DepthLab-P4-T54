@@ -21,15 +21,15 @@
 
 Every number is mean ± standard deviation. Latency is milliseconds; memory is MB.
 
-| Method | RMSE (mm) ↓ | MAE (mm) ↓ | PSNR (dB) ↑ | SSIM ↑ | Edge preservation ↑ | Boundary accuracy ↑ | Edge F1 ↑ | Latency (ms) | Process RSS (MB) | Python peak (MB) |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Nearest neighbour | 212.66 ± 47.29 | 61.72 ± 12.17 | 20.10 ± 1.50 | 0.823 ± 0.016 | 68.1 ± 4.4% | 10.2 ± 3.1% | 51.8 ± 8.6% | 1.54 ± 0.57 | 258.69 ± 0.01 | 0.33 ± 0.00 |
-| Bilinear | 183.15 ± 39.82 | 64.80 ± 14.00 | 21.38 ± 1.45 | 0.863 ± 0.016 | 73.9 ± 5.2% | 7.1 ± 4.1% | 66.8 ± 2.8% | 1.30 ± 0.36 | 258.69 ± 0.01 | 0.33 ± 0.00 |
-| Bicubic | 180.07 ± 39.63 | 65.71 ± 13.85 | 21.53 ± 1.47 | 0.848 ± 0.017 | 74.8 ± 5.4% | 6.3 ± 3.5% | 58.4 ± 4.3% | 1.30 ± 0.46 | 258.69 ± 0.01 | 0.33 ± 0.00 |
-| Joint bilateral | **158.51 ± 37.27** | **52.32 ± 11.67** | **22.68 ± 1.64** | **0.902 ± 0.015** | 80.2 ± 6.5% | 8.2 ± 4.8% | **68.5 ± 4.1%** | 36.99 ± 14.91 | 258.69 ± 0.01 | 1.36 ± 0.00 |
-| Guided filter | 200.20 ± 50.73 | 95.52 ± 30.25 | 20.65 ± 1.64 | 0.834 ± 0.050 | **86.0 ± 7.0%** | 1.2 ± 2.0% | 47.5 ± 3.3% | 1.63 ± 0.53 | 258.69 ± 0.01 | 0.96 ± 0.00 |
-| Residual U-Net | 180.19 ± 39.66 | 65.91 ± 13.88 | 21.53 ± 1.47 | 0.848 ± 0.017 | 74.8 ± 5.4% | 6.3 ± 3.5% | 58.4 ± 4.3% | 19.78 ± 5.54 | 258.69 ± 0.01 | 1.10 ± 0.00 |
-| Hybrid (bicubic → guided → U-Net → edge refinement) | 200.35 ± 50.68 | 95.95 ± 30.24 | 20.64 ± 1.63 | 0.834 ± 0.050 | 86.0 ± 7.0% | 1.2 ± 2.0% | 47.5 ± 3.3% | 23.05 ± 5.28 | 258.69 ± 0.01 | 1.16 ± 0.00 |
+| Method | RMSE (mm) ↓ | MAE (mm) ↓ | Boundary RMSE (mm) ↓ | PSNR (dB) ↑ | SSIM ↑ | RGB-edge agreement (proxy) ↑ | Boundary accuracy ↑ | Edge F1 ↑ | Latency (ms) | Process RSS (MB) | Python peak (MB) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Nearest neighbour | 212.66 ± 47.29 | 61.72 ± 12.17 | 542.39 ± 116.54 | 20.10 ± 1.50 | 0.823 ± 0.016 | 68.1 ± 4.4% | 10.2 ± 3.1% | 51.8 ± 8.6% | 1.07 ± 0.59 | 258.25 ± 0.12 | 0.33 ± 0.00 |
+| Bilinear | 183.15 ± 39.82 | 64.80 ± 14.00 | 467.94 ± 98.68 | 21.38 ± 1.45 | 0.863 ± 0.016 | 73.9 ± 5.2% | 7.1 ± 4.1% | 66.8 ± 2.8% | 0.98 ± 0.44 | 258.25 ± 0.12 | 0.33 ± 0.00 |
+| Bicubic | 180.07 ± 39.63 | 65.71 ± 13.85 | 456.99 ± 97.35 | 21.53 ± 1.47 | 0.848 ± 0.017 | 74.8 ± 5.4% | 6.3 ± 3.5% | 58.4 ± 4.3% | 0.97 ± 0.50 | 258.25 ± 0.12 | 0.33 ± 0.00 |
+| Joint bilateral | 158.51 ± 37.27 | **52.32 ± 11.67** | 404.49 ± 93.45 | 22.68 ± 1.64 | 0.902 ± 0.015 | 80.2 ± 6.5% | 8.2 ± 4.8% | **68.5 ± 4.1%** | 35.77 ± 20.65 | 258.25 ± 0.12 | 1.36 ± 0.00 |
+| Guided filter | **130.30 ± 40.39** | 59.37 ± 23.09 | **307.33 ± 80.68** | **24.51 ± 2.03** | 0.914 ± 0.042 | 90.8 ± 6.2% | 4.8 ± 4.3% | 57.3 ± 4.9% | 1.29 ± 0.39 | 258.25 ± 0.12 | 0.96 ± 0.00 |
+| Residual U-Net | 180.19 ± 39.66 | 65.91 ± 13.88 | 457.23 ± 97.45 | 21.53 ± 1.47 | 0.848 ± 0.017 | 74.8 ± 5.4% | 6.3 ± 3.5% | 58.4 ± 4.3% | 15.35 ± 10.76 | 258.25 ± 0.12 | 1.10 ± 0.00 |
+| Hybrid (bicubic → guided → U-Net → edge refinement) | 130.47 ± 40.31 | 59.82 ± 23.11 | 307.71 ± 80.58 | 24.50 ± 2.02 | **0.916 ± 0.042** | 90.8 ± 6.2% | 4.8 ± 4.3% | 57.7 ± 5.0% | 17.73 ± 10.66 | 258.25 ± 0.12 | 1.16 ± 0.00 |
 
 ## RMSE and SSIM across scales
 
@@ -38,12 +38,12 @@ Every number is mean ± standard deviation. Latency is milliseconds; memory is M
 | Nearest neighbour | 135.13 | 0.888 | 212.66 | 0.823 | 302.30 | 0.738 |
 | Bilinear | 120.45 | 0.926 | 183.15 | 0.863 | 263.00 | 0.773 |
 | Bicubic | 116.53 | 0.911 | 180.07 | 0.848 | 259.30 | 0.757 |
-| Joint bilateral | **92.53** | **0.969** | **158.51** | **0.902** | **243.38** | **0.794** |
-| Guided filter | 180.32 | 0.855 | 200.20 | 0.834 | 251.04 | 0.786 |
+| Joint bilateral | 92.53 | **0.969** | 158.51 | 0.902 | 243.38 | 0.794 |
+| Guided filter | **91.89** | 0.940 | **130.30** | 0.914 | **209.58** | 0.843 |
 | Residual U-Net | 116.66 | 0.911 | 180.19 | 0.848 | 259.35 | 0.757 |
-| Hybrid | 180.44 | 0.854 | 200.35 | 0.834 | 251.14 | 0.786 |
+| Hybrid | 91.98 | 0.942 | 130.47 | **0.916** | 209.70 | **0.844** |
 
-RMSE is in millimetres. The complete per-scale results and standard deviations for every metric are recorded in `evaluation/results.json`.
+RMSE is in millimetres. Values are means; complete means and standard deviations for each metric are in `evaluation/results.json`.
 
 ## Noisy and missing-depth experiments
 
@@ -54,30 +54,35 @@ Mean RMSE ± standard deviation at 4× across eight synthetic scenes:
 | Nearest neighbour | 211.04 ± 41.14 | 238.43 ± 56.99 |
 | Bilinear | 181.98 ± 34.80 | 203.97 ± 47.00 |
 | Bicubic | 178.82 ± 33.08 | 206.85 ± 49.44 |
-| Joint bilateral | **155.24 ± 29.84** | **187.77 ± 48.15** |
-| Guided filter | 199.83 ± 48.83 | 210.26 ± 51.78 |
+| Joint bilateral | 155.24 ± 29.84 | 187.77 ± 48.15 |
+| Guided filter | **129.41 ± 37.97** | **146.74 ± 42.33** |
 | Residual U-Net | 178.94 ± 33.14 | 206.92 ± 49.42 |
-| Hybrid | 199.98 ± 48.80 | 210.40 ± 51.76 |
+| Hybrid | 129.57 ± 37.91 | 146.91 ± 42.28 |
 
 ## Ablation study
 
-4× synthetic held-out scenes; mean ± standard deviation where shown:
+4× synthetic held-out scenes; every value is mean ± standard deviation:
 
-| Variant | RMSE (mm) ↓ | MAE (mm) ↓ | SSIM ↑ | Edge F1 ↑ |
-|---|---:|---:|---:|---:|
-| Full hybrid (bicubic + guided + U-Net) | 200.35 ± 50.68 | 95.95 ± 30.24 | 0.834 ± 0.050 | 47.5 ± 3.3% |
-| Without U-Net (joint bilateral only) | **158.51 ± 37.27** | **52.32 ± 11.67** | **0.902 ± 0.015** | **68.5 ± 4.1%** |
-| Without RGB guidance (constant gray guide) | 242.15 ± 50.96 | 117.70 ± 28.62 | 0.777 ± 0.031 | 44.3 ± 3.4% |
+| Variant | RMSE (mm) ↓ | MAE (mm) ↓ | Boundary RMSE (mm) ↓ | Boundary MAE (mm) ↓ | SSIM ↑ | Edge F1 ↑ |
+|---|---:|---:|---:|---:|---:|---:|
+| Full hybrid | 130.47 ± 40.31 | 59.82 ± 23.11 | 307.71 ± 80.58 | 251.09 ± 71.64 | 0.916 ± 0.042 | 57.7 ± 5.0% |
+| Without guided filter | 180.13 ± 39.66 | 65.58 ± 13.84 | 457.23 ± 97.45 | 328.55 ± 74.60 | 0.850 ± 0.017 | 59.1 ± 4.3% |
+| Without U-Net | 130.24 ± 40.38 | 59.39 ± 23.11 | 307.29 ± 80.68 | 251.02 ± 71.71 | 0.916 ± 0.042 | 57.8 ± 5.1% |
+| Without edge refinement | 130.53 ± 40.33 | 59.82 ± 23.09 | 307.75 ± 80.58 | 251.07 ± 71.61 | 0.914 ± 0.042 | 57.2 ± 4.8% |
+| Without RGB (constant gray guide) | 242.15 ± 50.96 | 117.70 ± 28.62 | 576.73 ± 117.30 | 526.40 ± 116.24 | 0.777 ± 0.031 | 44.3 ± 3.4% |
+| Bicubic reference | 180.07 ± 39.63 | 65.71 ± 13.85 | 456.99 ± 97.35 | 328.46 ± 74.58 | 0.848 ± 0.017 | 58.4 ± 4.3% |
+| Joint bilateral reference | 158.51 ± 37.27 | **52.32 ± 11.67** | 404.49 ± 93.45 | 275.52 ± 67.63 | 0.902 ± 0.015 | **68.5 ± 4.1%** |
 
 ## Interpretation and failure analysis
 
-- Joint bilateral filtering is the best RMSE method in these synthetic measurements. The hybrid did not improve on its classical joint bilateral baseline and performs materially worse at 4×. It remains implemented as the requested staged pipeline and is exposed for direct comparison, not claimed as the top method.
-- The standalone Residual U-Net is close to bicubic on this generated split. Synthetic training and simple geometry are insufficient to establish real-scene generalization.
-- The hybrid's highest RMSE among tested factors is at 8×. At 4× its RMSE is 200.0 ± 48.8 mm with 36 mm input noise and 210.4 ± 51.8 mm with 20% missing input.
-- Guided filtering has high RGB/depth edge-preservation correlation but low boundary accuracy; those are different metrics and neither alone establishes accurate geometry.
-- Simple generated scenes do not measure sensor calibration, realistic indoor geometry, thin structures, reflective/transparent surfaces, or RGB/depth misregistration.
+- The current JSON does not support the requested claim that the hybrid leads 4× RMSE, PSNR, or boundary RMSE: guided filtering is slightly better on those measures (RMSE 130.30 vs 130.47 mm; PSNR 24.512 vs 24.499 dB; boundary RMSE 307.33 vs 307.71 mm). The hybrid has the best 4× SSIM (0.916 vs 0.914).
+- At 8×, the hybrid also does not lead RMSE: guided filtering is slightly lower (209.58 vs 209.70 mm). The hybrid has the best 8× SSIM (0.844 vs 0.843).
+- Joint bilateral has the best 4× MAE (52.32 mm) and edge F1 (68.5%), and best 2× SSIM (0.969).
+- Removing the guided filter increases hybrid RMSE from 130.47 to 180.13 mm, close to the bicubic reference at 180.07 mm. The guided-filter stage contributes the main hybrid RMSE improvement on these scenes.
+- Residual U-Net is approximately equal to bicubic at 4× (180.19 vs 180.07 mm). Removing U-Net changes the hybrid RMSE by 0.23 mm (130.47 to 130.24 mm), so it contributes no meaningful RMSE improvement in this evaluation.
+- These results are synthetic only. They are not real-sensor validation and must not be compared with NYU or KITTI results.
+- Generated scenes do not measure sensor calibration, realistic indoor geometry, thin structures, reflective/transparent surfaces, or RGB/depth misregistration.
 - Nearest-valid hole filling can propagate an incorrect measurement through a large missing region. The system does not estimate uncertainty.
-- No real-dataset results are available; do not compare these numbers to published NYU/KITTI results.
 
 ## Demo checklist
 

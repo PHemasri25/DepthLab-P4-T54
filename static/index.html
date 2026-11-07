@@ -61,9 +61,9 @@
             <div class="stat-foot"><span class="tiny-dot teal"></span><span id="stat-rmse-method">Loading benchmark</span></div>
           </article>
           <article class="stat-card">
-            <div class="stat-top"><span>EDGE PRESERVATION</span><span class="stat-symbol">⌖</span></div>
+            <div class="stat-top"><span>RGB-EDGE AGREEMENT (PROXY)</span><span class="stat-symbol">⌖</span></div>
             <div class="stat-value" id="stat-edge">—</div>
-            <div class="stat-foot"><span class="tiny-dot blue"></span>RGB / depth boundary agreement</div>
+            <div class="stat-foot"><span class="tiny-dot blue"></span>Not a depth-accuracy metric</div>
           </article>
           <article class="stat-card">
             <div class="stat-top"><span>UNSEEN TEST SCENES</span><span class="stat-symbol">▧</span></div>
@@ -91,7 +91,7 @@
             <label class="upload-card" for="rgb-input">
               <input id="rgb-input" type="file" accept="image/*">
               <span class="upload-icon rgb-icon">◧</span>
-              <span class="upload-title">RGB guidance</span>
+              <span class="upload-title">RGB guidance <em>optional</em></span>
               <span class="upload-hint">Color image · PNG / JPG</span>
               <img class="upload-preview hidden" id="rgb-preview" alt="RGB guidance preview">
               <span class="file-name" id="rgb-name">Choose or drop an image</span>
@@ -142,7 +142,8 @@
             </label>
             <button type="button" class="button button-primary" id="run-button"><span class="run-icon">▶</span> Reconstruct</button>
           </div>
-          <p class="form-note">Inputs stay in your session and are processed in memory. Original measurement-validity masks are retained; depth values are preserved in the downloadable 16-bit PNG.</p>
+          <label class="simulation-control"><input id="simulate-input" type="checkbox"><span>Simulate sparse input from this full-resolution depth map</span></label>
+          <p class="form-note">RGB guidance is optional; when omitted, a grayscale guide is derived from the depth measurements. Simulation crops to a scale multiple, then adds 1% noise and 5% missing samples. Inputs are processed in memory.</p>
           <div class="alert hidden" id="workbench-alert" role="alert"></div>
           <div class="loading-line hidden" id="workbench-loading"><span></span> Reconstructing and measuring selected methods…</div>
 
@@ -174,7 +175,7 @@
             <h2>Built to measure, not guess.</h2>
             <div class="insight-list">
               <div><span class="insight-number">01</span><p><strong>Separated scene seeds</strong><br><span id="split-note">Training and test scenes are disjoint.</span></p></div>
-              <div><span class="insight-number">02</span><p><strong>Accuracy + structure</strong><br>RMSE, MAE, PSNR, SSIM, edge preservation and boundary accuracy.</p></div>
+              <div><span class="insight-number">02</span><p><strong>Accuracy + structure</strong><br>RMSE, MAE, boundary errors, PSNR, SSIM, and RGB-edge agreement (proxy).</p></div>
               <div><span class="insight-number">03</span><p><strong>Performance budget</strong><br>Per-method CPU latency and actual process RSS are reported.</p></div>
             </div>
             <p class="limitation-note" id="benchmark-limitations">Loading benchmark limitations…</p>
@@ -188,8 +189,8 @@
           </div>
           <div class="table-scroll">
             <table>
-              <thead><tr><th>METHOD</th><th>RMSE ↓</th><th>MAE ↓</th><th>PSNR ↑</th><th>SSIM ↑</th><th>EDGE SCORE ↑</th><th>BOUNDARY ↑</th><th>EDGE F1 ↑</th><th>LATENCY</th><th>PROCESS RSS</th></tr></thead>
-              <tbody id="benchmark-table"><tr><td colspan="10" class="empty-row">Running the held-out benchmark…</td></tr></tbody>
+              <thead><tr><th>METHOD</th><th>RMSE ↓</th><th>MAE ↓</th><th>BOUNDARY RMSE ↓</th><th>BOUNDARY MAE ↓</th><th>PSNR ↑</th><th>SSIM ↑</th><th>RGB-EDGE AGREEMENT (PROXY)</th><th>BOUNDARY ↑</th><th>EDGE F1 ↑</th><th>LATENCY</th><th>PROCESS RSS</th></tr></thead>
+              <tbody id="benchmark-table"><tr><td colspan="12" class="empty-row">Running the held-out benchmark…</td></tr></tbody>
             </table>
           </div>
         </section>

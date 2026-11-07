@@ -108,13 +108,15 @@ function metricMarkup(result, unit) {
     ? [
         ["RMSE", `${formatNumber(metrics.rmse)} ${unit}`],
         ["MAE", `${formatNumber(metrics.mae)} ${unit}`],
+        ["BOUNDARY RMSE", `${formatNumber(metrics.boundary_rmse)} ${unit}`],
+        ["BOUNDARY MAE", `${formatNumber(metrics.boundary_mae)} ${unit}`],
         ["PSNR", `${formatNumber(metrics.psnr, 2)} dB`],
         ["SSIM", formatNumber(metrics.ssim, 3)],
-        ["EDGE", `${formatNumber(metrics.edge_preservation * 100, 1)}%`],
+        ["RGB-edge agreement (proxy)", `${formatNumber(metrics.edge_preservation * 100, 1)}%`],
         ["BOUNDARY", `${formatNumber(metrics.boundary_accuracy * 100, 1)}%`],
         ["EDGE F1", `${formatNumber(metrics.edge_f1 * 100, 1)}%`],
       ]
-    : [["RMSE / MAE", "Ground truth needed"], ["EDGE / RGB", `${formatNumber(metrics.edge_preservation * 100, 1)}%`]];
+    : [["RMSE / MAE", "Ground truth needed"], ["RGB-edge agreement (proxy)", `${formatNumber(metrics.edge_preservation * 100, 1)}%`]];
   return `<div class="mini-metrics">${cells.map(([label, value]) => `<span>${label}<b>${value}</b></span>`).join("")}<span>LATENCY<b>${formatNumber(result.latency_ms)} ms</b></span><span>PROCESS RSS<b>${formatNumber(result.process_rss_mb)} MB</b></span></div>`;
 }
 
@@ -122,7 +124,7 @@ function renderResults(payload) {
   state.results = payload.results;
   byId("results-heading").classList.remove("hidden");
   byId("results-title").textContent = payload.results.length > 1 ? "Seven-method comparison" : payload.results[0].label;
-  byId("result-meta").textContent = `${payload.input.width} × ${payload.input.height} output · ${payload.input.scale}× target`;
+  byId("result-meta").textContent = `${payload.input.width} × ${payload.input.height} output · ${payload.input.scale}× target${payload.input.simulated ? " · simulated from dense depth" : ""}`;
   byId("results-grid").innerHTML = payload.results.map((result, index) => {
     const errorFigure = result.error_png
       ? `<figure><figcaption>ABSOLUTE ERROR</figcaption><img src="data:image/png;base64,${result.error_png}" alt="${result.label} error map"></figure>`
@@ -144,8 +146,8 @@ function renderResults(payload) {
 
 async function runReconstruction() {
   clearAlert();
-  if (!state.rgb || !state.depth) {
-    showAlert("Upload both an RGB guidance image and a sparse depth image, or load the sample scene.");
+  if (!state.depth) {
+    showAlert("Upload a depth image, or load the sample scene. RGB guidance is optional.");
     return;
   }
   const button = byId("run-button");
@@ -154,13 +156,15 @@ async function runReconstruction() {
   byId("workbench-loading").classList.remove("hidden");
   try {
     const form = new FormData();
-    form.append("rgb_file", state.rgb);
+    if (state.rgb) form.append("rgb_file", state.rgb);
     form.append("depth_file", state.depth);
-    if (state.truth) form.append("ground_truth_file", state.truth);
+    const simulate = byId("simulate-input").checked;
+    if (state.truth && !simulate) form.append("ground_truth_file", state.truth);
+    form.append("simulate", String(simulate));
     form.append("method", byId("method-select").value);
     form.append("scale", byId("scale-select").value);
     form.append("radius", byId("radius-input").value);
-    form.append("epsilon", "0.01");
+    form.append("epsilon", "0.0001");
     const response = await fetch("/api/process", { method: "POST", body: form });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.detail || `Reconstruction failed (${response.status}).`);
@@ -294,6 +298,8 @@ function renderBenchmark(report) {
     <td class="table-method">${row.label} ${index === 0 ? '<span class="rank-pill">BEST RMSE</span>' : ""}</td>
     <td class="number-cell ${index === 0 ? "best-cell" : ""}">${meanStd(row.rmse, row.rmse_std)}</td>
     <td class="number-cell">${meanStd(row.mae, row.mae_std)}</td>
+    <td class="number-cell">${meanStd(row.boundary_rmse, row.boundary_rmse_std)}</td>
+    <td class="number-cell">${meanStd(row.boundary_mae, row.boundary_mae_std)}</td>
     <td class="number-cell">${meanStd(row.psnr, row.psnr_std, 2)}</td>
     <td class="number-cell">${meanStd(row.ssim, row.ssim_std, 3)}</td>
     <td class="number-cell">${meanStd(row.edge_preservation * 100, row.edge_preservation_std * 100)}%</td>
@@ -356,7 +362,7 @@ async function loadBenchmark() {
     renderBenchmark(await response.json());
   } catch (error) {
     byId("stat-rmse-method").textContent = "Benchmark unavailable";
-    byId("benchmark-table").innerHTML = `<tr><td colspan="10" class="empty-row">${error.message}</td></tr>`;
+    byId("benchmark-table").innerHTML = `<tr><td colspan="12" class="empty-row">${error.message}</td></tr>`;
     byId("experiment-table").innerHTML = '<tr><td colspan="6" class="empty-row">Robustness results are unavailable.</td></tr>';
     byId("ablation-table").innerHTML = '<tr><td colspan="5" class="empty-row">Ablation results are unavailable.</td></tr>';
     byId("failure-analysis").innerHTML = "<li>Failure analysis is unavailable.</li>";

@@ -33,10 +33,10 @@
       "boundary_mae_std": 73.50866322786271,
       "edge_f1": 0.5181491915528023,
       "edge_f1_std": 0.08553297549700857,
-      "latency_ms": 1.067749999492662,
-      "latency_ms_std": 0.5876229866496789,
-      "process_rss_mb": 258.24658203125,
-      "process_rss_mb_std": 0.1187146184312297,
+      "latency_ms": 0.7921625074231997,
+      "latency_ms_std": 0.08230673314855767,
+      "process_rss_mb": 259.07861328125,
+      "process_rss_mb_std": 0.09124329215699892,
       "python_peak_mb": 0.33332157135009766,
       "python_peak_mb_std": 3.903080354629731e-05
     },
@@ -62,10 +62,10 @@
       "boundary_mae_std": 79.62455539581995,
       "edge_f1": 0.6679092053396745,
       "edge_f1_std": 0.027760547802475104,
-      "latency_ms": 0.9826749956118874,
-      "latency_ms_std": 0.4434904431168196,
-      "process_rss_mb": 258.24658203125,
-      "process_rss_mb_std": 0.1187146184312297,
+      "latency_ms": 0.7398124944302253,
+      "latency_ms_std": 0.06821262005874022,
+      "process_rss_mb": 259.0791015625,
+      "process_rss_mb_std": 0.08996573749678176,
       "python_peak_mb": 0.33332157135009766,
       "python_peak_mb_std": 3.903080354629731e-05
     },
@@ -91,10 +91,10 @@
       "boundary_mae_std": 74.58339998275203,
       "edge_f1": 0.5835254862860632,
       "edge_f1_std": 0.04321818845637754,
-      "latency_ms": 0.9731874997669365,
-      "latency_ms_std": 0.5035703086810247,
-      "process_rss_mb": 258.2470703125,
-      "process_rss_mb_std": 0.11915263131101991,
+      "latency_ms": 0.7392874940705951,
+      "latency_ms_std": 0.12282721329683446,
+      "process_rss_mb": 259.080078125,
+      "process_rss_mb_std": 0.09039403488598542,
       "python_peak_mb": 0.33332157135009766,
       "python_peak_mb_std": 3.903080354629731e-05
     },
@@ -120,10 +120,10 @@
       "boundary_mae_std": 67.63346439773196,
       "edge_f1": 0.6849719806872581,
       "edge_f1_std": 0.04137501720180453,
-      "latency_ms": 35.76622499895166,
-      "latency_ms_std": 20.650839457687283,
-      "process_rss_mb": 258.24755859375,
-      "process_rss_mb_std": 0.11942744516061948,
+      "latency_ms": 26.01993749703979,
+      "latency_ms_std": 6.477412615087723,
+      "process_rss_mb": 259.08056640625,
+      "process_rss_mb_std": 0.09060347729003505,
       "python_peak_mb": 1.3582792282104492,
       "python_peak_mb_std": 4.7136987137822714e-05
     },
@@ -149,10 +149,10 @@
       "boundary_mae_std": 71.6820161966604,
       "edge_f1": 0.5731456151259611,
       "edge_f1_std": 0.04919172554393852,
-      "latency_ms": 1.2863749943790026,
-      "latency_ms_std": 0.38626746118992883,
-      "process_rss_mb": 258.24755859375,
-      "process_rss_mb_std": 0.11942744516061948,
+      "latency_ms": 1.3102250049996655,
+      "latency_ms_std": 0.14695910907335383,
+      "process_rss_mb": 259.08056640625,
+      "process_rss_mb_std": 0.09060347729003505,
       "python_peak_mb": 0.9593019485473633,
       "python_peak_mb_std": 3.903080354629731e-05
     },
@@ -178,10 +178,10 @@
       "boundary_mae_std": 74.61420685121749,
       "edge_f1": 0.5836086799831441,
       "edge_f1_std": 0.04324933721276609,
-      "latency_ms": 15.354037503129803,
-      "latency_ms_std": 10.756461270301502,
-      "process_rss_mb": 258.2490234375,
-      "process_rss_mb_std": 0.12052142346148918,
+      "latency_ms": 10.081675001856638,
+      "latency_ms_std": 2.0600287947110667,
+      "process_rss_mb": 259.08154296875,
+      "process_rss_mb_std": 0.09120147459946144,
       "python_peak_mb": 1.1002616882324219,
       "python_peak_mb_std": 0.00017031031979578403
     },
@@ -207,10 +207,10 @@
       "boundary_mae_std": 71.64260398760726,
       "edge_f1": 0.5771787983325203,
       "edge_f1_std": 0.050295719309438984,
-      "latency_ms": 17.7301749936305,
-      "latency_ms_std": 10.660624572412999,
-      "process_rss_mb": 258.2490234375,
-      "process_rss_mb_std": 0.12052142346148918,
+      "latency_ms": 12.530987503851065,
+      "latency_ms_std": 3.0488444253061133,
+      "process_rss_mb": 259.08154296875,
+      "process_rss_mb_std": 0.09120147459946144,
       "python_peak_mb": 1.162698745727539,
       "python_peak_mb_std": 3.443807618192251e-05
     }
@@ -239,10 +239,10 @@
         "boundary_mae_std": 38.693563840839076,
         "edge_f1": 0.5859837923162368,
         "edge_f1_std": 0.1182394866531145,
-        "latency_ms": 1.6674624966981355,
-        "latency_ms_std": 1.0803575487741082,
-        "process_rss_mb": 255.55224609375,
-        "process_rss_mb_std": 5.9556052780665505,
+        "latency_ms": 1.7339875012112316,
+        "latency_ms_std": 1.641870777471733,
+        "process_rss_mb": 256.2880859375,
+        "process_rss_mb_std": 6.153479480364828,
         "python_peak_mb": 0.39153552055358887,
         "python_peak_mb_std": 0.00043346458229150467
       },
@@ -268,10 +268,10 @@
         "boundary_mae_std": 40.73492809174021,
         "edge_f1": 0.8840466746126618,
         "edge_f1_std": 0.040285431846944574,
-        "latency_ms": 1.1581375038076658,
-        "latency_ms_std": 0.19999989393256923,
-        "process_rss_mb": 255.59716796875,
-        "process_rss_mb_std": 5.839842259843821,
+        "latency_ms": 1.1298125027678907,
+        "latency_ms_std": 0.17317279742109903,
+        "process_rss_mb": 256.32763671875,
+        "process_rss_mb_std": 6.0504333711313905,
         "python_peak_mb": 0.39137983322143555,
         "python_peak_mb_std": 5.130156228864196e-05
       },
@@ -297,10 +297,10 @@
         "boundary_mae_std": 41.074461671184935,
         "edge_f1": 0.636604605670827,
         "edge_f1_std": 0.0797956259659286,
-        "latency_ms": 1.1835374898510054,
-        "latency_ms_std": 0.26199382794598697,
-        "process_rss_mb": 255.59765625,
-        "process_rss_mb_std": 5.840045264604287,
+        "latency_ms": 1.13897499977611,
+        "latency_ms_std": 0.1816661924465549,
+        "process_rss_mb": 256.3310546875,
+        "process_rss_mb_std": 6.042891340986711,
         "python_peak_mb": 0.39137983322143555,
         "python_peak_mb_std": 5.130156228864196e-05
       },
@@ -326,10 +326,10 @@
         "boundary_mae_std": 34.216233874624706,
         "edge_f1": 0.9151629275023926,
         "edge_f1_std": 0.0394648776401974,
-        "latency_ms": 26.066537502629217,
-        "latency_ms_std": 6.3146210673020535,
-        "process_rss_mb": 255.6123046875,
-        "process_rss_mb_std": 5.821527095766678,
+        "latency_ms": 23.59625000099186,
+        "latency_ms_std": 2.0864233694324508,
+        "process_rss_mb": 256.36669921875,
+        "process_rss_mb_std": 6.046068536962416,
         "python_peak_mb": 1.4164776802062988,
         "python_peak_mb_std": 0.00040776882297921557
       },
@@ -355,10 +355,10 @@
         "boundary_mae_std": 74.91014854597206,
         "edge_f1": 0.6694268330587638,
         "edge_f1_std": 0.08943309934335025,
-        "latency_ms": 1.6886625016923063,
-        "latency_ms_std": 0.414935690229278,
-        "process_rss_mb": 255.6181640625,
-        "process_rss_mb_std": 5.807478756022096,
+        "latency_ms": 1.5175500047917012,
+        "latency_ms_std": 0.10520055479056296,
+        "process_rss_mb": 256.37255859375,
+        "process_rss_mb_std": 6.03201555917767,
         "python_peak_mb": 1.0173602104187012,
         "python_peak_mb_std": 5.130156228864196e-05
       },
@@ -384,10 +384,10 @@
         "boundary_mae_std": 41.061000588537986,
         "edge_f1": 0.6354192218442539,
         "edge_f1_std": 0.07910040056902749,
-        "latency_ms": 11.195949995453702,
-        "latency_ms_std": 2.610158683171874,
-        "process_rss_mb": 257.27197265625,
-        "process_rss_mb_std": 1.449250254327167,
+        "latency_ms": 10.830787501618033,
+        "latency_ms_std": 3.3117601846858795,
+        "process_rss_mb": 258.064453125,
+        "process_rss_mb_std": 1.5664513027342697,
         "python_peak_mb": 1.1583189964294434,
         "python_peak_mb_std": 0.00025165394433661694
       },
@@ -413,10 +413,10 @@
         "boundary_mae_std": 74.73633936221509,
         "edge_f1": 0.6811944425847617,
         "edge_f1_std": 0.08833038897558801,
-        "latency_ms": 12.111375006497838,
-        "latency_ms_std": 2.161869987886848,
-        "process_rss_mb": 257.75146484375,
-        "process_rss_mb_std": 0.3406282337280204,
+        "latency_ms": 11.235162502998719,
+        "latency_ms_std": 0.5753544795030315,
+        "process_rss_mb": 258.62890625,
+        "process_rss_mb_std": 0.2981699758068479,
         "python_peak_mb": 1.2209162712097168,
         "python_peak_mb_std": 0.0002508467122829924
       }
@@ -444,10 +444,10 @@
         "boundary_mae_std": 73.50866322786271,
         "edge_f1": 0.5181491915528023,
         "edge_f1_std": 0.08553297549700857,
-        "latency_ms": 1.067749999492662,
-        "latency_ms_std": 0.5876229866496789,
-        "process_rss_mb": 258.24658203125,
-        "process_rss_mb_std": 0.1187146184312297,
+        "latency_ms": 0.7921625074231997,
+        "latency_ms_std": 0.08230673314855767,
+        "process_rss_mb": 259.07861328125,
+        "process_rss_mb_std": 0.09124329215699892,
         "python_peak_mb": 0.33332157135009766,
         "python_peak_mb_std": 3.903080354629731e-05
       },
@@ -473,10 +473,10 @@
         "boundary_mae_std": 79.62455539581995,
         "edge_f1": 0.6679092053396745,
         "edge_f1_std": 0.027760547802475104,
-        "latency_ms": 0.9826749956118874,
-        "latency_ms_std": 0.4434904431168196,
-        "process_rss_mb": 258.24658203125,
-        "process_rss_mb_std": 0.1187146184312297,
+        "latency_ms": 0.7398124944302253,
+        "latency_ms_std": 0.06821262005874022,
+        "process_rss_mb": 259.0791015625,
+        "process_rss_mb_std": 0.08996573749678176,
         "python_peak_mb": 0.33332157135009766,
         "python_peak_mb_std": 3.903080354629731e-05
       },
@@ -502,10 +502,10 @@
         "boundary_mae_std": 74.58339998275203,
         "edge_f1": 0.5835254862860632,
         "edge_f1_std": 0.04321818845637754,
-        "latency_ms": 0.9731874997669365,
-        "latency_ms_std": 0.5035703086810247,
-        "process_rss_mb": 258.2470703125,
-        "process_rss_mb_std": 0.11915263131101991,
+        "latency_ms": 0.7392874940705951,
+        "latency_ms_std": 0.12282721329683446,
+        "process_rss_mb": 259.080078125,
+        "process_rss_mb_std": 0.09039403488598542,
         "python_peak_mb": 0.33332157135009766,
         "python_peak_mb_std": 3.903080354629731e-05
       },
@@ -531,10 +531,10 @@
         "boundary_mae_std": 67.63346439773196,
         "edge_f1": 0.6849719806872581,
         "edge_f1_std": 0.04137501720180453,
-        "latency_ms": 35.76622499895166,
-        "latency_ms_std": 20.650839457687283,
-        "process_rss_mb": 258.24755859375,
-        "process_rss_mb_std": 0.11942744516061948,
+        "latency_ms": 26.01993749703979,
+        "latency_ms_std": 6.477412615087723,
+        "process_rss_mb": 259.08056640625,
+        "process_rss_mb_std": 0.09060347729003505,
         "python_peak_mb": 1.3582792282104492,
         "python_peak_mb_std": 4.7136987137822714e-05
       },
@@ -560,10 +560,10 @@
         "boundary_mae_std": 71.6820161966604,
         "edge_f1": 0.5731456151259611,
         "edge_f1_std": 0.04919172554393852,
-        "latency_ms": 1.2863749943790026,
-        "latency_ms_std": 0.38626746118992883,
-        "process_rss_mb": 258.24755859375,
-        "process_rss_mb_std": 0.11942744516061948,
+        "latency_ms": 1.3102250049996655,
+        "latency_ms_std": 0.14695910907335383,
+        "process_rss_mb": 259.08056640625,
+        "process_rss_mb_std": 0.09060347729003505,
         "python_peak_mb": 0.9593019485473633,
         "python_peak_mb_std": 3.903080354629731e-05
       },
@@ -589,10 +589,10 @@
         "boundary_mae_std": 74.61420685121749,
         "edge_f1": 0.5836086799831441,
         "edge_f1_std": 0.04324933721276609,
-        "latency_ms": 15.354037503129803,
-        "latency_ms_std": 10.756461270301502,
-        "process_rss_mb": 258.2490234375,
-        "process_rss_mb_std": 0.12052142346148918,
+        "latency_ms": 10.081675001856638,
+        "latency_ms_std": 2.0600287947110667,
+        "process_rss_mb": 259.08154296875,
+        "process_rss_mb_std": 0.09120147459946144,
         "python_peak_mb": 1.1002616882324219,
         "python_peak_mb_std": 0.00017031031979578403
       },
@@ -618,10 +618,10 @@
         "boundary_mae_std": 71.64260398760726,
         "edge_f1": 0.5771787983325203,
         "edge_f1_std": 0.050295719309438984,
-        "latency_ms": 17.7301749936305,
-        "latency_ms_std": 10.660624572412999,
-        "process_rss_mb": 258.2490234375,
-        "process_rss_mb_std": 0.12052142346148918,
+        "latency_ms": 12.530987503851065,
+        "latency_ms_std": 3.0488444253061133,
+        "process_rss_mb": 259.08154296875,
+        "process_rss_mb_std": 0.09120147459946144,
         "python_peak_mb": 1.162698745727539,
         "python_peak_mb_std": 3.443807618192251e-05
       }
@@ -649,10 +649,10 @@
         "boundary_mae_std": 121.60806133746458,
         "edge_f1": 0.32490064939690516,
         "edge_f1_std": 0.057141394766367974,
-        "latency_ms": 1.7479124944657087,
-        "latency_ms_std": 0.32717210572383554,
-        "process_rss_mb": 258.37548828125,
-        "process_rss_mb_std": 0.0012918707573557572,
+        "latency_ms": 0.6906375019752886,
+        "latency_ms_std": 0.08207949117298699,
+        "process_rss_mb": 259.16015625,
+        "process_rss_mb_std": 0.001953125,
         "python_peak_mb": 0.31885766983032227,
         "python_peak_mb_std": 1.7681595056285055e-05
       },
@@ -678,10 +678,10 @@
         "boundary_mae_std": 118.61383266683038,
         "edge_f1": 0.46535736131921696,
         "edge_f1_std": 0.03191855083993373,
-        "latency_ms": 1.7845375041360967,
-        "latency_ms_std": 0.11377051144882025,
-        "process_rss_mb": 258.37548828125,
-        "process_rss_mb_std": 0.0012918707573557572,
+        "latency_ms": 0.6884374961373396,
+        "latency_ms_std": 0.10261653467655191,
+        "process_rss_mb": 259.16015625,
+        "process_rss_mb_std": 0.001953125,
         "python_peak_mb": 0.31885766983032227,
         "python_peak_mb_std": 1.7681595056285055e-05
       },
@@ -707,10 +707,10 @@
         "boundary_mae_std": 116.17752528261981,
         "edge_f1": 0.4388395250381806,
         "edge_f1_std": 0.04027885670989759,
-        "latency_ms": 1.917650006362237,
-        "latency_ms_std": 0.13468714904580564,
-        "process_rss_mb": 258.37548828125,
-        "process_rss_mb_std": 0.0012918707573557572,
+        "latency_ms": 0.7166749965108465,
+        "latency_ms_std": 0.1176906340350659,
+        "process_rss_mb": 259.16015625,
+        "process_rss_mb_std": 0.001953125,
         "python_peak_mb": 0.31885766983032227,
         "python_peak_mb_std": 1.7681595056285055e-05
       },
@@ -736,10 +736,10 @@
         "boundary_mae_std": 110.62773180192642,
         "edge_f1": 0.45655398816410686,
         "edge_f1_std": 0.03914514018400277,
-        "latency_ms": 68.89872499232297,
-        "latency_ms_std": 2.8515200546090704,
-        "process_rss_mb": 258.3759765625,
-        "process_rss_mb_std": 0.0025837415147115144,
+        "latency_ms": 24.65585000027204,
+        "latency_ms_std": 1.6608784174183524,
+        "process_rss_mb": 259.16796875,
+        "process_rss_mb_std": 0.02218323572578232,
         "python_peak_mb": 1.3438096046447754,
         "python_peak_mb_std": 1.7681595056285055e-05
       },
@@ -765,10 +765,10 @@
         "boundary_mae_std": 97.94665866594492,
         "edge_f1": 0.4476544308748007,
         "edge_f1_std": 0.044714402269475186,
-        "latency_ms": 2.768062498944346,
-        "latency_ms_std": 0.18404999486806065,
-        "process_rss_mb": 258.3759765625,
-        "process_rss_mb_std": 0.0025837415147115144,
+        "latency_ms": 1.1559374906937592,
+        "latency_ms_std": 0.07568143382121244,
+        "process_rss_mb": 259.16796875,
+        "process_rss_mb_std": 0.02218323572578232,
         "python_peak_mb": 0.9448380470275879,
         "python_peak_mb_std": 1.7681595056285055e-05
       },
@@ -794,10 +794,10 @@
         "boundary_mae_std": 116.0655137679364,
         "edge_f1": 0.4390873518125189,
         "edge_f1_std": 0.04028220120456765,
-        "latency_ms": 33.96227499615634,
-        "latency_ms_std": 3.7977441966810286,
-        "process_rss_mb": 258.3759765625,
-        "process_rss_mb_std": 0.0025837415147115144,
+        "latency_ms": 9.65121250555967,
+        "latency_ms_std": 1.314990393420772,
+        "process_rss_mb": 259.16845703125,
+        "process_rss_mb_std": 0.02196180287504787,
         "python_peak_mb": 1.085554599761963,
         "python_peak_mb_std": 0.00011245170945688354
       },
@@ -823,10 +823,10 @@
         "boundary_mae_std": 97.79377404239783,
         "edge_f1": 0.4486342770696957,
         "edge_f1_std": 0.04512235672888215,
-        "latency_ms": 38.11748750740662,
-        "latency_ms_std": 1.3492679970992587,
-        "process_rss_mb": 258.3759765625,
-        "process_rss_mb_std": 0.0025837415147115144,
+        "latency_ms": 10.562799994659144,
+        "latency_ms_std": 0.6500147868202244,
+        "process_rss_mb": 259.16845703125,
+        "process_rss_mb_std": 0.02196180287504787,
         "python_peak_mb": 1.1481690406799316,
         "python_peak_mb_std": 5.85384374800434e-05
       }
@@ -868,10 +868,10 @@
           "boundary_mae_std": 69.87942634264955,
           "edge_f1": 0.2931776216759515,
           "edge_f1_std": 0.047616861913901146,
-          "latency_ms": 1.1731624945241492,
-          "latency_ms_std": 0.2665561365689327,
-          "process_rss_mb": 259.142578125,
-          "process_rss_mb_std": 0.5211477729211774
+          "latency_ms": 0.5992500045977067,
+          "latency_ms_std": 0.17905854843111166,
+          "process_rss_mb": 259.97607421875,
+          "process_rss_mb_std": 0.45816265164851727
         },
         {
           "method": "bilinear",
@@ -895,10 +895,10 @@
           "boundary_mae_std": 75.06654486208157,
           "edge_f1": 0.5636903831129756,
           "edge_f1_std": 0.05749896511174283,
-          "latency_ms": 1.1615499970503151,
-          "latency_ms_std": 0.07478991629019748,
-          "process_rss_mb": 259.14404296875,
-          "process_rss_mb_std": 0.5216651631700261
+          "latency_ms": 0.5202750071475748,
+          "latency_ms_std": 0.13231002814626347,
+          "process_rss_mb": 259.9765625,
+          "process_rss_mb_std": 0.45866012482820206
         },
         {
           "method": "bicubic",
@@ -922,10 +922,10 @@
           "boundary_mae_std": 67.65617928224894,
           "edge_f1": 0.4147585730802684,
           "edge_f1_std": 0.054529125998128584,
-          "latency_ms": 1.2109500021324493,
-          "latency_ms_std": 0.07122085692810534,
-          "process_rss_mb": 259.14404296875,
-          "process_rss_mb_std": 0.5216651631700261
+          "latency_ms": 0.5199374973017257,
+          "latency_ms_std": 0.1385261817208725,
+          "process_rss_mb": 259.9765625,
+          "process_rss_mb_std": 0.45866012482820206
         },
         {
           "method": "joint_bilateral",
@@ -949,10 +949,10 @@
           "boundary_mae_std": 59.96224964978554,
           "edge_f1": 0.6529394923122986,
           "edge_f1_std": 0.05085597578338597,
-          "latency_ms": 56.2506874994142,
-          "latency_ms_std": 2.158349966340453,
-          "process_rss_mb": 259.14501953125,
-          "process_rss_mb_std": 0.5218187039100517
+          "latency_ms": 25.156737501674797,
+          "latency_ms_std": 7.380504672432606,
+          "process_rss_mb": 259.9765625,
+          "process_rss_mb_std": 0.45866012482820206
         },
         {
           "method": "guided",
@@ -976,10 +976,10 @@
           "boundary_mae_std": 67.74892938359278,
           "edge_f1": 0.5729470863673501,
           "edge_f1_std": 0.04573911103094906,
-          "latency_ms": 1.9295000056445133,
-          "latency_ms_std": 0.32167776603977905,
-          "process_rss_mb": 259.14501953125,
-          "process_rss_mb_std": 0.5218187039100517
+          "latency_ms": 0.8896750005078502,
+          "latency_ms_std": 0.22889357945561867,
+          "process_rss_mb": 259.9765625,
+          "process_rss_mb_std": 0.45866012482820206
         },
         {
           "method": "cnn",
@@ -1003,10 +1003,10 @@
           "boundary_mae_std": 67.70777515502837,
           "edge_f1": 0.4144329197439427,
           "edge_f1_std": 0.0544825380030649,
-          "latency_ms": 31.034637504490092,
-          "latency_ms_std": 2.0654008343605073,
-          "process_rss_mb": 259.24853515625,
-          "process_rss_mb_std": 0.5267029436309121
+          "latency_ms": 10.348825002438389,
+          "latency_ms_std": 1.9506122813991955,
+          "process_rss_mb": 260.07861328125,
+          "process_rss_mb_std": 0.4573084324896573
         },
         {
           "method": "hybrid",
@@ -1030,10 +1030,10 @@
           "boundary_mae_std": 67.69099091961702,
           "edge_f1": 0.5770152527922471,
           "edge_f1_std": 0.045861120097400676,
-          "latency_ms": 35.303387499880046,
-          "latency_ms_std": 1.8622661374874563,
-          "process_rss_mb": 259.2490234375,
-          "process_rss_mb_std": 0.5270968388974493
+          "latency_ms": 12.333000002399785,
+          "latency_ms_std": 2.364859202237428,
+          "process_rss_mb": 260.07958984375,
+          "process_rss_mb_std": 0.4580731375821875
         }
       ],
       "high_missing": [
@@ -1059,10 +1059,10 @@
           "boundary_mae_std": 86.94475199631808,
           "edge_f1": 0.5036077496525782,
           "edge_f1_std": 0.08747929666711884,
-          "latency_ms": 1.2934124933963176,
-          "latency_ms_std": 0.09489111562860991,
-          "process_rss_mb": 259.2509765625,
-          "process_rss_mb_std": 0.5258142968231773
+          "latency_ms": 0.5741250024584588,
+          "latency_ms_std": 0.12653397800757404,
+          "process_rss_mb": 260.07958984375,
+          "process_rss_mb_std": 0.4580731375821875
         },
         {
           "method": "bilinear",
@@ -1086,10 +1086,10 @@
           "boundary_mae_std": 91.51455866344105,
           "edge_f1": 0.6499492110477314,
           "edge_f1_std": 0.03502573711265085,
-          "latency_ms": 1.09695000355714,
-          "latency_ms_std": 0.194590641874836,
-          "process_rss_mb": 259.25146484375,
-          "process_rss_mb_std": 0.5252742142032212
+          "latency_ms": 0.5352750013116747,
+          "latency_ms_std": 0.16828800340659758,
+          "process_rss_mb": 260.07958984375,
+          "process_rss_mb_std": 0.4580731375821875
         },
         {
           "method": "bicubic",
@@ -1113,10 +1113,10 @@
           "boundary_mae_std": 88.6042729676998,
           "edge_f1": 0.5679310874092856,
           "edge_f1_std": 0.047076374558938074,
-          "latency_ms": 1.197612495161593,
-          "latency_ms_std": 0.18106400176626414,
-          "process_rss_mb": 259.2529296875,
-          "process_rss_mb_std": 0.5252335891592924
+          "latency_ms": 0.5308375002641696,
+          "latency_ms_std": 0.09735215157678394,
+          "process_rss_mb": 260.080078125,
+          "process_rss_mb_std": 0.45845631192230984
         },
         {
           "method": "joint_bilateral",
@@ -1140,10 +1140,10 @@
           "boundary_mae_std": 83.76602765330063,
           "edge_f1": 0.6643203537683731,
           "edge_f1_std": 0.04842890364612455,
-          "latency_ms": 56.67566250122036,
-          "latency_ms_std": 2.424392383627695,
-          "process_rss_mb": 259.2529296875,
-          "process_rss_mb_std": 0.5252335891592924
+          "latency_ms": 25.13986250050948,
+          "latency_ms_std": 6.2984426132727505,
+          "process_rss_mb": 260.080078125,
+          "process_rss_mb_std": 0.45845631192230984
         },
         {
           "method": "guided",
@@ -1167,10 +1167,10 @@
           "boundary_mae_std": 77.58111893281878,
           "edge_f1": 0.5477811033660646,
           "edge_f1_std": 0.057813106886877075,
-          "latency_ms": 2.0806000065931585,
-          "latency_ms_std": 0.15569077757403174,
-          "process_rss_mb": 259.2548828125,
-          "process_rss_mb_std": 0.5246776862984662
+          "latency_ms": 0.9074375047930516,
+          "latency_ms_std": 0.1854223840494413,
+          "process_rss_mb": 260.0810546875,
+          "process_rss_mb_std": 0.4592242973332644
         },
         {
           "method": "cnn",
@@ -1194,10 +1194,10 @@
           "boundary_mae_std": 88.5234645129151,
           "edge_f1": 0.5676447368274946,
           "edge_f1_std": 0.046704896068681945,
-          "latency_ms": 32.12392500063288,
-          "latency_ms_std": 1.586595635356743,
-          "process_rss_mb": 259.25537109375,
-          "process_rss_mb_std": 0.5241364324893576
+          "latency_ms": 10.72102500256733,
+          "latency_ms_std": 1.646527131952718,
+          "process_rss_mb": 260.0810546875,
+          "process_rss_mb_std": 0.4592242973332644
         },
         {
           "method": "hybrid",
@@ -1221,10 +1221,10 @@
           "boundary_mae_std": 77.54251329207655,
           "edge_f1": 0.5494464755174157,
           "edge_f1_std": 0.058773787938046,
-          "latency_ms": 35.2747500037367,
-          "latency_ms_std": 1.6294485998274013,
-          "process_rss_mb": 259.27197265625,
-          "process_rss_mb_std": 0.5093236885672193
+          "latency_ms": 14.19277499007876,
+          "latency_ms_std": 3.2275390724256297,
+          "process_rss_mb": 260.0966796875,
+          "process_rss_mb_std": 0.44053577574852587
         }
       ]
     }
@@ -1253,10 +1253,10 @@
       "boundary_mae_std": 71.64260398760726,
       "edge_f1": 0.5771787983325203,
       "edge_f1_std": 0.050295719309438984,
-      "latency_ms": 18.94992499728687,
-      "latency_ms_std": 11.666194460398918,
-      "process_rss_mb": 258.28125,
-      "process_rss_mb_std": 0.0923148617038787
+      "latency_ms": 12.292525007069344,
+      "latency_ms_std": 1.3630892086588509,
+      "process_rss_mb": 259.08203125,
+      "process_rss_mb_std": 0.09135949659005078
     },
     {
       "variant": "Without guided filter",
@@ -1281,10 +1281,10 @@
       "boundary_mae_std": 74.60240162883713,
       "edge_f1": 0.5909593753486294,
       "edge_f1_std": 0.04323559010919829,
-      "latency_ms": 18.533812504756497,
-      "latency_ms_std": 11.963311565948343,
-      "process_rss_mb": 258.28173828125,
-      "process_rss_mb_std": 0.09250964758797099
+      "latency_ms": 12.095037502149353,
+      "latency_ms_std": 2.0509045547296973,
+      "process_rss_mb": 259.08251953125,
+      "process_rss_mb_std": 0.09157714518315943
     },
     {
       "variant": "Without U-Net",
@@ -1309,10 +1309,10 @@
       "boundary_mae_std": 71.7085430663689,
       "edge_f1": 0.5779149913956813,
       "edge_f1_std": 0.05083492460540926,
-      "latency_ms": 4.617200007487554,
-      "latency_ms_std": 2.387186559371352,
-      "process_rss_mb": 258.28466796875,
-      "process_rss_mb_std": 0.09444803405622036
+      "latency_ms": 3.7303374956536572,
+      "latency_ms_std": 0.9172781732151778,
+      "process_rss_mb": 259.0830078125,
+      "process_rss_mb_std": 0.09185399652299346
     },
     {
       "variant": "Without edge refinement",
@@ -1337,10 +1337,10 @@
       "boundary_mae_std": 71.61447885988704,
       "edge_f1": 0.5723765672508911,
       "edge_f1_std": 0.048248445744471326,
-      "latency_ms": 16.610275000857655,
-      "latency_ms_std": 10.780112005213422,
-      "process_rss_mb": 258.28466796875,
-      "process_rss_mb_std": 0.09444803405622036
+      "latency_ms": 11.378849998436635,
+      "latency_ms_std": 2.93028517535434,
+      "process_rss_mb": 259.0830078125,
+      "process_rss_mb_std": 0.09185399652299346
     },
     {
       "variant": "Without RGB (constant gray guide)",
@@ -1365,10 +1365,10 @@
       "boundary_mae_std": 116.2394299958625,
       "edge_f1": 0.4430917909352317,
       "edge_f1_std": 0.03440711502008354,
-      "latency_ms": 17.974662503547734,
-      "latency_ms_std": 10.756711158918536,
-      "process_rss_mb": 258.28564453125,
-      "process_rss_mb_std": 0.09464976550283266
+      "latency_ms": 13.0989624922222,
+      "latency_ms_std": 5.121559300805308,
+      "process_rss_mb": 259.083984375,
+      "process_rss_mb_std": 0.09212872199274028
     },
     {
       "variant": "Bicubic reference",
@@ -1393,10 +1393,10 @@
       "boundary_mae_std": 74.58339998275203,
       "edge_f1": 0.5835254862860632,
       "edge_f1_std": 0.04321818845637754,
-      "latency_ms": 2.676262505701743,
-      "latency_ms_std": 1.6042371702640312,
-      "process_rss_mb": 258.2861328125,
-      "process_rss_mb_std": 0.09473662961969471
+      "latency_ms": 2.117912496032659,
+      "latency_ms_std": 0.7449742135089792,
+      "process_rss_mb": 259.08447265625,
+      "process_rss_mb_std": 0.0922515646535617
     },
     {
       "variant": "Joint bilateral reference",
@@ -1421,10 +1421,10 @@
       "boundary_mae_std": 67.63346439773196,
       "edge_f1": 0.6849719806872581,
       "edge_f1_std": 0.04137501720180453,
-      "latency_ms": 30.602487502619624,
-      "latency_ms_std": 17.891114372239233,
-      "process_rss_mb": 258.287109375,
-      "process_rss_mb_std": 0.09532370579619086
+      "latency_ms": 22.087050001573516,
+      "latency_ms_std": 5.757583869692692,
+      "process_rss_mb": 259.08544921875,
+      "process_rss_mb_std": 0.09279784835096844
     }
   ],
   "failure_analysis": [
